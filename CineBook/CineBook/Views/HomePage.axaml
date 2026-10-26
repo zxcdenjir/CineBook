@@ -1,0 +1,109 @@
+<ContentPage xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:avalonia="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
+             xmlns:u="https://irihi.tech/ursa"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="CineBook.Views.HomePage"
+             Header="CineBook"
+             Background="{DynamicResource PageBg}">
+    <NavigationPage.TopCommandBar>
+        <Grid ColumnDefinitions="*,Auto,Auto"
+              ColumnSpacing="8"
+              Margin="8"
+              IsVisible="{OnPlatform Default=False, Android=True, iOS=True}">
+
+            <u:ThemeToggleButton Grid.Column="1"
+                                 Mode="Indicator"
+                                 Height="44"
+                                 VerticalAlignment="Stretch"
+                                 BorderBrush="{DynamicResource SemiColorBorder}"
+                                 BorderThickness="1" />
+
+            <u:IconButton Grid.Column="2"
+                          Classes="SurfaceButton"
+                          Width="44"
+                          Height="44"
+                          Padding="0"
+                          VerticalAlignment="Stretch"
+                          ToolTip.Tip="Дополнительные действия">
+
+                <u:IconButton.Icon>
+                    <avalonia:MaterialIcon Kind="DotsVertical" />
+                </u:IconButton.Icon>
+
+                <u:IconButton.Flyout>
+                    <MenuFlyout Placement="BottomEdgeAlignedRight" FlyoutPresenterClasses="CineBookMenuFlyout" ShowMode="Transient">
+                        <MenuItem Header="Импорт">
+                            <MenuItem.Icon>
+                                <avalonia:MaterialIcon Kind="Import" />
+                            </MenuItem.Icon>
+                        </MenuItem>
+                        <MenuItem Header="Экспорт">
+                            <MenuItem.Icon>
+                                <avalonia:MaterialIcon Kind="Export" />
+                            </MenuItem.Icon>
+                        </MenuItem>
+                        <MenuItem Header="Добавить">
+                            <MenuItem.Icon>
+                                <avalonia:MaterialIcon Kind="Plus" />
+                            </MenuItem.Icon>
+                        </MenuItem>
+                    </MenuFlyout>
+                </u:IconButton.Flyout>
+            </u:IconButton>
+
+
+        </Grid>
+    </NavigationPage.TopCommandBar>
+    <ContentPage.Styles>
+        <Style Selector="ContentPage">
+            <Setter Property="Background" Value="{DynamicResource PageBg}" />
+        </Style>
+    </ContentPage.Styles>
+    <Grid RowDefinitions="Auto, *">
+        <Grid
+            Margin="25"
+            ColumnDefinitions="{OnPlatform Windows='*, Auto, Auto, Auto, Auto', Linux='*, Auto, Auto, Auto, Auto', macOS='*, Auto, Auto, Auto', Android='*', iOS='*'}"
+            ColumnSpacing="{OnPlatform Windows='12', Linux='12', macOS='12', Android='0', iOS='0'}">
+            <TextBox PlaceholderText="Поиск" Padding="12" CornerRadius="22">
+                <TextBox.InnerLeftContent>
+                    <avalonia:MaterialIcon Kind="Magnify" VerticalAlignment="Center" HorizontalAlignment="Center" />
+                </TextBox.InnerLeftContent>
+            </TextBox>
+            <u:ThemeToggleButton Grid.Column="1" Mode="Indicator"
+                                 BorderBrush="{DynamicResource SemiColorBorder}"
+                                 BorderThickness="1"
+                                 VerticalAlignment="Stretch"
+                                 IsVisible="{OnPlatform Default=True, Android=False, iOS=False}" />
+            <u:IconButton Grid.Column="2" Content="Импорт" VerticalAlignment="Stretch"
+                          IsVisible="{OnPlatform Default=True, Android=False, iOS=False}">
+                <u:IconButton.Icon>
+                    <avalonia:MaterialIcon Kind="Import" />
+                </u:IconButton.Icon>
+            </u:IconButton>
+            <u:IconButton Grid.Column="3" Content="Экспорт" VerticalAlignment="Stretch"
+                          IsVisible="{OnPlatform Default=True, Android=False, iOS=False}">
+                <u:IconButton.Icon>
+                    <avalonia:MaterialIcon Kind="Export" />
+                </u:IconButton.Icon>
+            </u:IconButton>
+            <u:IconButton Grid.Column="4" Content="Добавить" VerticalAlignment="Stretch"
+                          Theme="{StaticResource SolidIconButton}" Foreground="White"
+                          IsVisible="{OnPlatform Default=True, Android=False, iOS=False}"
+                          BorderThickness="0">
+                <u:IconButton.Icon>
+                    <avalonia:MaterialIcon Kind="Plus" />
+                </u:IconButton.Icon>
+            </u:IconButton>
+        </Grid>
+        <TabbedPage Grid.Row="1" Margin="{OnPlatform Android=0, iOS=0, Default='25 0'}">
+            <ContentPage Header="Все"></ContentPage>
+            <ContentPage Header="Фильмы"></ContentPage>
+            <ContentPage Header="Сериалы"></ContentPage>
+            <ContentPage Header="Книги"></ContentPage>
+            <ContentPage Header="Избранное"></ContentPage>
+        </TabbedPage>
+    </Grid>
+</ContentPage>

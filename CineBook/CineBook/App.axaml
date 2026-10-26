@@ -1,0 +1,270 @@
+﻿<Application xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             x:Class="CineBook.App"
+             xmlns:local="using:CineBook"
+             xmlns:semi="https://irihi.tech/semi"
+             xmlns:materialIcons="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
+             xmlns:u="https://irihi.tech/ursa"
+             RequestedThemeVariant="Default">
+
+    <Application.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.ThemeDictionaries>
+                <ResourceDictionary x:Key="Light">
+                    <SolidColorBrush x:Key="SemiColorPrimary" Color="#B85C38" />
+                    <SolidColorBrush x:Key="SemiColorPrimaryPointerover" Color="#A64F30" />
+                    <SolidColorBrush x:Key="SemiColorPrimaryActive" Color="#914329" />
+                    <SolidColorBrush x:Key="SemiColorPrimaryDisabled" Color="#D9B4A4" />
+                    <SolidColorBrush x:Key="SemiColorPrimaryLight" Color="#F8EAE4" />
+                    <SolidColorBrush x:Key="SemiColorPrimaryLightPointerover" Color="#F0D6CA" />
+                    <SolidColorBrush x:Key="SemiColorPrimaryLightActive" Color="#E5B9A7" />
+
+                    <SolidColorBrush x:Key="SemiColorSecondary" Color="#A65335" />
+                    <SolidColorBrush x:Key="SemiColorSecondaryPointerover" Color="#93462C" />
+                    <SolidColorBrush x:Key="SemiColorSecondaryActive" Color="#7C3923" />
+                    <SolidColorBrush x:Key="SemiColorSecondaryDisabled" Color="#D5B3A5" />
+                    <SolidColorBrush x:Key="SemiColorSecondaryLight" Color="#F6E8E1" />
+                    <SolidColorBrush x:Key="SemiColorSecondaryLightPointerover" Color="#EED4C8" />
+                    <SolidColorBrush x:Key="SemiColorSecondaryLightActive" Color="#E2B8A7" />
+
+                    <SolidColorBrush x:Key="MyButtonForeground" Color="#5C564C" />
+                    <SolidColorBrush x:Key="SemiColorBorder" Color="#E7DFD3" />
+                    <SolidColorBrush x:Key="ButtonOutlineBorderBrush" Color="#E7DFD3" />
+                    <SolidColorBrush x:Key="ButtonGroupSeparatorForeground" Color="#E7DFD3" />
+                    <SolidColorBrush x:Key="PageBg" Color="#FAF7F2" />
+
+                    <SolidColorBrush x:Key="ButtonOutlineBackground" Color="#F1EBE2" />
+                    <SolidColorBrush x:Key="ButtonOutlinePointeroverBackground" Color="#EAE1D4" />
+                    <SolidColorBrush x:Key="ButtonOutlinePressedBackground" Color="#DED1BF" />
+
+                    <SolidColorBrush x:Key="ButtonSolidPrimaryBackground" Color="#B85C38" />
+                    <SolidColorBrush x:Key="ButtonSolidPrimaryBorderBrush" Color="#B85C38" />
+
+                    <SolidColorBrush x:Key="ButtonSolidPrimaryPointeroverBackground" Color="#A64F30" />
+                    <SolidColorBrush x:Key="ButtonSolidPrimaryPointeroverBorderBrush" Color="#A64F30" />
+
+                    <SolidColorBrush x:Key="ButtonSolidPrimaryPressedBackground" Color="#914329" />
+                    <SolidColorBrush x:Key="ButtonSolidPrimaryPressedBorderBrush" Color="#914329" />
+                    <SolidColorBrush x:Key="ButtonSolidPrimaryPressedForeground" Color="#FFFFFF" />
+
+                    <SolidColorBrush x:Key="TextBoxDefaultBackground" Color="#F1EBE2" />
+                    <SolidColorBrush x:Key="TextBoxPointeroverBackground" Color="#F8F2E9" />
+                    <SolidColorBrush x:Key="TextBoxPressedBackground" Color="#F0E7DA" />
+                    <SolidColorBrush x:Key="TextBoxFocusBorderBrush" Color="#B85C38" />
+
+                    <SolidColorBrush x:Key="CineBookAccent" Color="#B85C38" />
+                    <SolidColorBrush x:Key="CineBookAccentHover" Color="#A64F30" />
+                    <SolidColorBrush x:Key="CineBookAccentPressed" Color="#914329" />
+                </ResourceDictionary>
+
+                <ResourceDictionary x:Key="Dark">
+                    <SolidColorBrush x:Key="SemiColorPrimary" Color="#B85C38" />
+                    <SolidColorBrush x:Key="SemiColorPrimaryPointerover" Color="#A64F30" />
+                    <SolidColorBrush x:Key="SemiColorPrimaryActive" Color="#914329" />
+                    <SolidColorBrush x:Key="SemiColorPrimaryDisabled" Color="#795141" />
+                    <SolidColorBrush x:Key="SemiColorPrimaryLight" Color="#39271F" />
+                    <SolidColorBrush x:Key="SemiColorPrimaryLightPointerover" Color="#483026" />
+                    <SolidColorBrush x:Key="SemiColorPrimaryLightActive" Color="#5A382B" />
+
+                    <SolidColorBrush x:Key="SemiColorSecondary" Color="#A65335" />
+                    <SolidColorBrush x:Key="SemiColorSecondaryPointerover" Color="#93462C" />
+                    <SolidColorBrush x:Key="SemiColorSecondaryActive" Color="#7C3923" />
+                    <SolidColorBrush x:Key="SemiColorSecondaryDisabled" Color="#715344" />
+                    <SolidColorBrush x:Key="SemiColorSecondaryLight" Color="#352821" />
+                    <SolidColorBrush x:Key="SemiColorSecondaryLightPointerover" Color="#443027" />
+                    <SolidColorBrush x:Key="SemiColorSecondaryLightActive" Color="#54372B" />
+
+                    <SolidColorBrush x:Key="MyButtonForeground" Color="#C9BCAB" />
+                    <SolidColorBrush x:Key="SemiColorBorder" Color="#463D33" />
+                    <SolidColorBrush x:Key="ButtonOutlineBorderBrush" Color="#463D33" />
+                    <SolidColorBrush x:Key="ButtonGroupSeparatorForeground" Color="#463D33" />
+                    <SolidColorBrush x:Key="PageBg" Color="#201B16" />
+
+                    <SolidColorBrush x:Key="ButtonOutlineBackground" Color="#2D261F" />
+                    <SolidColorBrush x:Key="ButtonOutlinePointeroverBackground" Color="#372D23" />
+                    <SolidColorBrush x:Key="ButtonOutlinePressedBackground" Color="#433629" />
+
+                    <SolidColorBrush x:Key="ButtonSolidPrimaryBackground" Color="#B85C38" />
+                    <SolidColorBrush x:Key="ButtonSolidPrimaryBorderBrush" Color="#B85C38" />
+
+                    <SolidColorBrush x:Key="ButtonSolidPrimaryPointeroverBackground" Color="#A64F30" />
+                    <SolidColorBrush x:Key="ButtonSolidPrimaryPointeroverBorderBrush" Color="#A64F30" />
+
+                    <SolidColorBrush x:Key="ButtonSolidPrimaryPressedBackground" Color="#914329" />
+                    <SolidColorBrush x:Key="ButtonSolidPrimaryPressedBorderBrush" Color="#914329" />
+                    <SolidColorBrush x:Key="ButtonSolidPrimaryPressedForeground" Color="#FFFFFF" />
+
+                    <SolidColorBrush x:Key="TextBoxDefaultBackground" Color="#29231D" />
+                    <SolidColorBrush x:Key="TextBoxPointeroverBackground" Color="#30281F" />
+                    <SolidColorBrush x:Key="TextBoxPressedBackground" Color="#3A2F24" />
+                    <SolidColorBrush x:Key="TextBoxFocusBorderBrush" Color="#B85C38" />
+
+                    <SolidColorBrush x:Key="CineBookAccent" Color="#B85C38" />
+                    <SolidColorBrush x:Key="CineBookAccentHover" Color="#A64F30" />
+                    <SolidColorBrush x:Key="CineBookAccentPressed" Color="#914329" />
+                </ResourceDictionary>
+            </ResourceDictionary.ThemeDictionaries>
+        </ResourceDictionary>
+    </Application.Resources>
+
+    <Application.Styles>
+        <semi:SemiTheme Locale="ru-RU" />
+        <semi:SemiPopupAnimations />
+        <semi:UrsaSemiTheme Locale="ru-RU" />
+        <materialIcons:MaterialIconStyles />
+
+        <Style Selector="TextBox">
+            <Setter Property="CornerRadius" Value="12" />
+            <Setter Property="Padding" Value="12" />
+            <Setter Property="Background" Value="{DynamicResource TextBoxDefaultBackground}" />
+            <Setter Property="BorderBrush" Value="{DynamicResource SemiColorBorder}" />
+        </Style>
+
+        <Style Selector="TextBox:pointerover /template/ Border#PART_ContentPresenterBorder">
+            <Setter Property="BorderBrush" Value="{DynamicResource SemiColorBorder}" />
+        </Style>
+
+        <Style Selector="TextBox:focus /template/ Border#PART_ContentPresenterBorder">
+            <Setter Property="BorderBrush" Value="{DynamicResource TextBoxFocusBorderBrush}" />
+        </Style>
+
+        <Style Selector="Button">
+            <Setter Property="CornerRadius" Value="12" />
+            <Setter Property="Padding" Value="12" />
+            <Setter Property="Theme" Value="{StaticResource OutlineButton}" />
+            <Setter Property="Foreground" Value="{DynamicResource MyButtonForeground}" />
+            <Setter Property="BorderBrush" Value="{DynamicResource SemiColorBorder}" />
+        </Style>
+
+        <Style Selector="u|IconButton">
+            <Setter Property="CornerRadius" Value="12" />
+            <Setter Property="Padding" Value="12" />
+            <Setter Property="Theme" Value="{StaticResource OutlineIconButton}" />
+            <Setter Property="Foreground" Value="{DynamicResource MyButtonForeground}" />
+            <Setter Property="BorderBrush" Value="{DynamicResource SemiColorBorder}" />
+        </Style>
+
+        <Style Selector="u|IconButton.SurfaceButton /template/ Border#PART_Background">
+            <Setter Property="Background" Value="{DynamicResource ButtonOutlineBackground}" />
+            <Setter Property="BorderBrush" Value="{DynamicResource SemiColorBorder}" />
+        </Style>
+
+        <Style Selector="u|IconButton.SurfaceButton:pointerover /template/ Border#PART_Background">
+            <Setter Property="Background" Value="{DynamicResource ButtonOutlinePointeroverBackground}" />
+        </Style>
+
+        <Style Selector="u|IconButton.SurfaceButton:pressed /template/ Border#PART_Background">
+            <Setter Property="Background" Value="{DynamicResource ButtonOutlinePressedBackground}" />
+        </Style>
+
+        <Style Selector="u|IconButton.PrimaryAction /template/ Border#PART_Background">
+            <Setter Property="Background" Value="{DynamicResource CineBookAccent}" />
+            <Setter Property="BorderBrush" Value="{DynamicResource CineBookAccent}" />
+        </Style>
+
+        <Style Selector="u|IconButton.PrimaryAction:pointerover /template/ Border#PART_Background">
+            <Setter Property="Background" Value="{DynamicResource CineBookAccentHover}" />
+            <Setter Property="BorderBrush" Value="{DynamicResource CineBookAccentHover}" />
+        </Style>
+
+        <Style Selector="u|IconButton.PrimaryAction:pressed /template/ Border#PART_Background">
+            <Setter Property="Background" Value="{DynamicResource CineBookAccentPressed}" />
+            <Setter Property="BorderBrush" Value="{DynamicResource CineBookAccentPressed}" />
+        </Style>
+
+        <Style Selector="u|ThemeToggleButton:dark /template/ u|IconButton#PART_ThemeButton:left:empty-content">
+            <Setter Property="VerticalAlignment" Value="Stretch" />
+            <Setter Property="Padding" Value="0" />
+            <Setter Property="Width" Value="{Binding $self.Bounds.Height}" />
+        </Style>
+
+        <Style Selector="u|ThemeToggleButton:light /template/ u|IconButton#PART_ThemeButton:left:empty-content">
+            <Setter Property="VerticalAlignment" Value="Stretch" />
+            <Setter Property="Padding" Value="0" />
+            <Setter Property="Width" Value="{Binding $self.Bounds.Height}" />
+        </Style>
+
+        <Style
+            Selector="u|ThemeToggleButton:dark /template/ u|IconButton#PART_ThemeButton:left:empty-content /template/ Border#PART_Background">
+            <Setter Property="CornerRadius" Value="12" />
+            <Setter Property="BorderBrush" Value="{DynamicResource SemiColorBorder}" />
+        </Style>
+
+        <Style
+            Selector="u|ThemeToggleButton:light /template/ u|IconButton#PART_ThemeButton:left:empty-content /template/ Border#PART_Background">
+            <Setter Property="CornerRadius" Value="12" />
+            <Setter Property="BorderBrush" Value="{DynamicResource SemiColorBorder}" />
+        </Style>
+
+        <Style
+            Selector="u|ThemeToggleButton /template/ u|IconButton#PART_ThemeButton /template/ Border#PART_Background">
+            <Setter Property="Background" Value="{DynamicResource ButtonOutlineBackground}" />
+        </Style>
+
+        <Style
+            Selector="u|ThemeToggleButton /template/ u|IconButton#PART_ThemeButton:pointerover /template/ Border#PART_Background">
+            <Setter Property="Background" Value="{DynamicResource ButtonOutlinePointeroverBackground}" />
+        </Style>
+
+        <Style
+            Selector="u|ThemeToggleButton /template/ u|IconButton#PART_ThemeButton:pressed /template/ Border#PART_Background">
+            <Setter Property="Background" Value="{DynamicResource ButtonOutlinePressedBackground}" />
+        </Style>
+
+        <Style
+            Selector="u|ThemeToggleButton:dark /template/ u|IconButton#PART_ThemeButton /template/ ContentPresenter#PART_ContentPresenter">
+            <Setter Property="Foreground" Value="{DynamicResource MyButtonForeground}" />
+        </Style>
+
+        <Style
+            Selector="u|ThemeToggleButton:light /template/ u|IconButton#PART_ThemeButton /template/ ContentPresenter#PART_ContentPresenter">
+            <Setter Property="Foreground" Value="{DynamicResource MyButtonForeground}" />
+        </Style>
+
+        <Style Selector="TabItem">
+            <Setter Property="FontSize"
+                    Value="{OnPlatform Default=14, Android=12, iOS=12, x:TypeArguments=x:Double}" />
+        </Style>
+
+        <Style Selector="TabItem:selected /template/ Border#PART_RootBorder">
+            <Setter Property="BorderBrush" Value="{DynamicResource CineBookAccent}" />
+        </Style>
+
+        <Style Selector="NavigationPage">
+            <Setter Property="BarHeight"
+                    Value="{OnPlatform Default=32, Windows=32, Linux=32, macOS=32, Android=48, iOS=48, x:TypeArguments=x:Double}" />
+        </Style>
+
+        <Style Selector="NavigationPage:nav-bar-inset /template/ Border#PART_NavigationBar">
+            <Setter Property="Background" Value="{DynamicResource PageBg}" />
+            <Setter Property="BorderThickness" Value="0" />
+        </Style>
+
+        <Style Selector="Popup">
+            <Setter Property="Cursor" Value="Arrow" />
+        </Style>
+
+        <Style Selector="MenuFlyoutPresenter.CineBookMenuFlyout">
+            <Setter Property="CornerRadius" Value="12" />
+            <Setter Property="Background" Value="{DynamicResource TextBoxDefaultBackground}" />
+            <Setter Property="BorderBrush" Value="{DynamicResource SemiColorBorder}" />
+            <Setter Property="BorderThickness" Value="1" />
+        </Style>
+
+        <Style Selector="MenuItem">
+            <Setter Property="Foreground" Value="{DynamicResource MyButtonForeground}" />
+
+            <!-- Наведение и выбор пункта -->
+            <Style Selector="^:selected /template/ ContentPresenter#PART_HeaderPresenter">
+                <Setter Property="Foreground" Value="{DynamicResource MyButtonForeground}" />
+            </Style>
+
+            <!-- Нажатие -->
+            <Style Selector="^:pressed /template/ Border#PART_LayoutRoot:pointerover">
+                <Style Selector="^ ContentPresenter#PART_HeaderPresenter">
+                    <Setter Property="Foreground" Value="{DynamicResource MyButtonForeground}" />
+                </Style>
+            </Style>
+        </Style>
+    </Application.Styles>
+</Application>

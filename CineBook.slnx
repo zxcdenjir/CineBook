@@ -1,0 +1,11 @@
+<Solution>
+  <Project Path="CineBook/CineBook.Android/CineBook.Android.csproj">
+    <Deploy />
+  </Project>
+  <Project Path="CineBook/CineBook.Desktop/CineBook.Desktop.csproj" />
+  <Project Path="CineBook/CineBook.iOS/CineBook.iOS.csproj">
+    <Build Solution="Debug|*" Project="false" />
+    <Deploy Solution="Release|*" />
+  </Project>
+  <Project Path="CineBook/CineBook/CineBook.csproj" />
+</Solution>
