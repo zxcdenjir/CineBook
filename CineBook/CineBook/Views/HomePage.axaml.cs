@@ -12,9 +12,4 @@ public partial class HomePage : ContentPage
     {
         InitializeComponent();
     }
-
-    private void Button_OnClick(object? sender, RoutedEventArgs e)
-    {
-        Task.Delay(3000).Wait();
-    }
 }

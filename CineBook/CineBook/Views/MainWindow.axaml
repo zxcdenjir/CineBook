@@ -6,7 +6,7 @@
         xmlns:views="using:CineBook.Views"
         xmlns:u="https://irihi.tech/ursa"
         mc:Ignorable="d" d:DesignWidth="480" d:DesignHeight="800"
-        Width="920" Height="620" 
+        Width="1070" Height="620" 
         x:Class="CineBook.Views.MainWindow"
         WindowStartupLocation="CenterOwner"
         Icon="/Assets/avalonia-logo.ico"

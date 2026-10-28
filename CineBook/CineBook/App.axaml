@@ -55,6 +55,9 @@
                     <SolidColorBrush x:Key="CineBookAccent" Color="#B85C38" />
                     <SolidColorBrush x:Key="CineBookAccentHover" Color="#A64F30" />
                     <SolidColorBrush x:Key="CineBookAccentPressed" Color="#914329" />
+                    
+                    <SolidColorBrush x:Key="CardBackground" Color="#FFFFFF"/>
+                    <SolidColorBrush x:Key="HeartBackground" Color="#f3f2f5"/>
                 </ResourceDictionary>
 
                 <ResourceDictionary x:Key="Dark">
@@ -102,6 +105,10 @@
                     <SolidColorBrush x:Key="CineBookAccent" Color="#B85C38" />
                     <SolidColorBrush x:Key="CineBookAccentHover" Color="#A64F30" />
                     <SolidColorBrush x:Key="CineBookAccentPressed" Color="#914329" />
+                    
+                    <SolidColorBrush x:Key="CardBackground" Color="#2C2620"/>
+                    <SolidColorBrush x:Key="HeartBackground" Color="#2d2b27"/>
+                    
                 </ResourceDictionary>
             </ResourceDictionary.ThemeDictionaries>
         </ResourceDictionary>

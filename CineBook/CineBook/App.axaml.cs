@@ -1,9 +1,12 @@
-﻿using Avalonia;
+﻿using System;
+using Avalonia;
 using Avalonia.Controls.ApplicationLifetimes;
-using Avalonia.Controls;
 using Avalonia.Markup.Xaml;
 using CineBook.ViewModels;
 using CineBook.Views;
+using CineBook.Context;
+using Microsoft.EntityFrameworkCore;
+using Avalonia.Controls;
 
 namespace CineBook;
 
@@ -19,6 +22,13 @@ public partial class App : Application
 
     public override void OnFrameworkInitializationCompleted()
     {
+        if (!Design.IsDesignMode)
+        {
+            CineBookContext.InitializeDatabaseFromBundledTemplate();
+            using var context = new CineBookContext();
+            context.Database.EnsureCreated();
+        }
+
         if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
         {
             desktop.MainWindow = new MainWindow
