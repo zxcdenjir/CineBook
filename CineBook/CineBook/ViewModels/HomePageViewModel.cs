@@ -45,6 +45,36 @@ public partial class HomePageViewModel : ViewModelBase
             MainView.Current.ShowToast(ex.InnerException?.Message ?? ex.Message, NotificationType.Error);
         }
     }
+
+    [RelayCommand]
+    public async Task ToggleFavoriteAsync(MediaItem item)
+    {
+        try
+        {
+            await using var context = new CineBookContext();
+            var storedItem = await context.MediaItems.FindAsync(item.Id);
+            if (storedItem is null)
+                return;
+
+            storedItem.IsFavorite = !storedItem.IsFavorite;
+            await context.SaveChangesAsync();
+
+            item.IsFavorite = storedItem.IsFavorite;
+            if (item.IsFavorite)
+            {
+                if (!FavouriteMediaItems.Contains(item))
+                    FavouriteMediaItems.Add(item);
+            }
+            else
+            {
+                FavouriteMediaItems.Remove(item);
+            }
+        }
+        catch (Exception ex)
+        {
+            MainView.Current.ShowToast(ex.InnerException?.Message ?? ex.Message, NotificationType.Error);
+        }
+    }
     
     private void ApplyFilters()
     {

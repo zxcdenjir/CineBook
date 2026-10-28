@@ -55,9 +55,16 @@
                     <SolidColorBrush x:Key="CineBookAccent" Color="#B85C38" />
                     <SolidColorBrush x:Key="CineBookAccentHover" Color="#A64F30" />
                     <SolidColorBrush x:Key="CineBookAccentPressed" Color="#914329" />
-                    
+
                     <SolidColorBrush x:Key="CardBackground" Color="#FFFFFF"/>
                     <SolidColorBrush x:Key="HeartBackground" Color="#f3f2f5"/>
+
+                    <SolidColorBrush x:Key="StatusWatchedText" Color="#3E7C4F" />
+                    <SolidColorBrush x:Key="StatusWatchedBackground" Color="#E4F0E4" />
+                    <SolidColorBrush x:Key="StatusPlanningText" Color="#6B6459" />
+                    <SolidColorBrush x:Key="StatusPlanningBackground" Color="#EFEAE1" />
+                    <SolidColorBrush x:Key="StatusWatchingText" Color="#3D6B8E" />
+                    <SolidColorBrush x:Key="StatusWatchingBackground" Color="#E1EBF3" />
                 </ResourceDictionary>
 
                 <ResourceDictionary x:Key="Dark">
@@ -105,10 +112,17 @@
                     <SolidColorBrush x:Key="CineBookAccent" Color="#B85C38" />
                     <SolidColorBrush x:Key="CineBookAccentHover" Color="#A64F30" />
                     <SolidColorBrush x:Key="CineBookAccentPressed" Color="#914329" />
-                    
+
                     <SolidColorBrush x:Key="CardBackground" Color="#2C2620"/>
                     <SolidColorBrush x:Key="HeartBackground" Color="#2d2b27"/>
-                    
+
+                    <SolidColorBrush x:Key="StatusWatchedText" Color="#8CC49A" />
+                    <SolidColorBrush x:Key="StatusWatchedBackground" Color="#26372B" />
+                    <SolidColorBrush x:Key="StatusPlanningText" Color="#C9BDA8" />
+                    <SolidColorBrush x:Key="StatusPlanningBackground" Color="#39342B" />
+                    <SolidColorBrush x:Key="StatusWatchingText" Color="#8AB8D8" />
+                    <SolidColorBrush x:Key="StatusWatchingBackground" Color="#243440" />
+
                 </ResourceDictionary>
             </ResourceDictionary.ThemeDictionaries>
         </ResourceDictionary>
@@ -260,18 +274,33 @@
 
         <Style Selector="MenuItem">
             <Setter Property="Foreground" Value="{DynamicResource MyButtonForeground}" />
-
-            <!-- Наведение и выбор пункта -->
             <Style Selector="^:selected /template/ ContentPresenter#PART_HeaderPresenter">
                 <Setter Property="Foreground" Value="{DynamicResource MyButtonForeground}" />
             </Style>
-
-            <!-- Нажатие -->
             <Style Selector="^:pressed /template/ Border#PART_LayoutRoot:pointerover">
                 <Style Selector="^ ContentPresenter#PART_HeaderPresenter">
                     <Setter Property="Foreground" Value="{DynamicResource MyButtonForeground}" />
                 </Style>
             </Style>
+        </Style>
+
+        <Style Selector="Border.StatusPill[Tag=1]">
+            <Setter Property="Background" Value="{DynamicResource StatusWatchedBackground}" />
+        </Style>
+        <Style Selector="Border.StatusPill[Tag=2]">
+            <Setter Property="Background" Value="{DynamicResource StatusWatchingBackground}" />
+        </Style>
+        <Style Selector="Border.StatusPill[Tag=3]">
+            <Setter Property="Background" Value="{DynamicResource StatusPlanningBackground}" />
+        </Style>
+        <Style Selector="Border.StatusPill[Tag=1] TextBlock">
+            <Setter Property="Foreground" Value="{DynamicResource StatusWatchedText}" />
+        </Style>
+        <Style Selector="Border.StatusPill[Tag=2] TextBlock">
+            <Setter Property="Foreground" Value="{DynamicResource StatusWatchingText}" />
+        </Style>
+        <Style Selector="Border.StatusPill[Tag=3] TextBlock">
+            <Setter Property="Foreground" Value="{DynamicResource StatusPlanningText}" />
         </Style>
     </Application.Styles>
 </Application>

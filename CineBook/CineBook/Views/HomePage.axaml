@@ -3,6 +3,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:avalonia="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
+             xmlns:controls="using:CineBook.Controls"
              xmlns:u="https://irihi.tech/ursa"
              xmlns:vm="clr-namespace:CineBook.ViewModels"
              xmlns:models="clr-namespace:CineBook.Models"
@@ -70,9 +71,9 @@
 
     <Grid RowDefinitions="Auto, *">
         <Grid
-            Margin="25"
+            Margin="{OnPlatform Default='25', Android='12', iOS='12'}"
             ColumnDefinitions="{OnPlatform Default='*, Auto, Auto, Auto', Android='*', iOS='*'}"
-            ColumnSpacing="{OnPlatform Windows='12', Linux='12', macOS='12', Android='0', iOS='0'}">
+            ColumnSpacing="{OnPlatform Default='12', Android='0', iOS='0'}">
             <TextBox PlaceholderText="Поиск" Padding="12" CornerRadius="22">
                 <TextBox.InnerLeftContent>
                     <avalonia:MaterialIcon Kind="Magnify" VerticalAlignment="Center" HorizontalAlignment="Center" />
@@ -108,11 +109,13 @@
             <ContentPage Header="Все">
                 <Grid Margin="{OnPlatform Default='0 25', Android='12 0', iOS='12 0'}">
                     <ScrollViewer VerticalScrollBarVisibility="Hidden" HorizontalScrollBarVisibility="Disabled">
-                        <ItemsControl ItemsSource="{Binding AllMediaItems}">
+                        <ItemsControl ItemsSource="{Binding AllMediaItems}"
+                                      VerticalAlignment="Top">
                             <ItemsControl.ItemsPanel>
                                 <ItemsPanelTemplate>
                                     <UniformGrid ColumnSpacing="12" RowSpacing="12"
-                                                 Columns="{OnPlatform Default=4, Android=2, iOS=2}" />
+                                                 Columns="{OnPlatform Default=4, Android=2, iOS=2}"
+                                                 VerticalAlignment="Top" />
                                 </ItemsPanelTemplate>
                             </ItemsControl.ItemsPanel>
                             <ItemsControl.ItemTemplate>
@@ -120,38 +123,94 @@
                                     <Border BorderThickness="1" BorderBrush="{DynamicResource SemiColorBorder}"
                                             CornerRadius="12" VerticalAlignment="Top" ClipToBounds="True"
                                             Background="{DynamicResource CardBackground}" Cursor="Hand">
-                                        <Grid RowDefinitions="108,92">
-                                            <Panel Grid.Row="0">
+                                        <Grid RowDefinitions="{OnPlatform Default='108,92', Android='108,Auto', iOS='108,Auto'}">
+                                            <Grid Grid.Row="0">
+                                                <Border Background="{Binding PosterPlaceholderBrush}" />
+                                                <Path Data="{Binding PosterPlaceholderIcon}"
+                                                      Width="28" Height="28"
+                                                      Stretch="Uniform"
+                                                      Stroke="#EFFFFFFF" StrokeThickness="2.5"
+                                                      StrokeLineCap="Round" StrokeJoin="Round"
+                                                      HorizontalAlignment="Center"
+                                                      VerticalAlignment="Center"
+                                                      Opacity="0.9" />
                                                 <Grid ColumnDefinitions="*, Auto" VerticalAlignment="Top" Margin="8">
-                                                    <Label Theme="{StaticResource TagLabel}"
-                                                           Content="{Binding Status.Name}" Classes="Circle Green"
-                                                           FontSize="11" VerticalAlignment="Top" FontWeight="Bold" />
-                                                    <Border Grid.Column="1" Height="24" Width="24" CornerRadius="12"
-                                                            Padding="0"
-                                                            Background="{DynamicResource HeartBackground}">
-                                                        <avalonia:MaterialIcon Kind="Heart" Foreground="#b85c38"
-                                                                               Width="11" />
+                                                    <Border Tag="{Binding StatusId}"
+                                                            Classes="StatusPill"
+                                                            CornerRadius="999"
+                                                            Padding="9,4"
+                                                            VerticalAlignment="Top"
+                                                            HorizontalAlignment="Left">
+                                                        <TextBlock Text="{Binding Status.Name}"
+                                                                   FontSize="11"
+                                                                   FontWeight="Bold" />
                                                     </Border>
+                                                    <Button Grid.Column="1"
+                                                            Height="24" Width="24"
+                                                            VerticalAlignment="Top"
+                                                            HorizontalAlignment="Right"
+                                                            MinHeight="0" MinWidth="0"
+                                                            CornerRadius="12"
+                                                            Padding="0"
+                                                            Background="{DynamicResource HeartBackground}"
+                                                            x:CompileBindings="False"
+                                                            Command="{Binding $parent[ItemsControl].DataContext.ToggleFavoriteCommand}"
+                                                            CommandParameter="{Binding}">
+                                                        <Grid>
+                                                            <avalonia:MaterialIcon Kind="HeartOutline"
+                                                                                   Foreground="#9C948A"
+                                                                                   Width="13"
+                                                                                   IsVisible="{Binding !IsFavorite}" />
+                                                            <avalonia:MaterialIcon Kind="Heart"
+                                                                                   Foreground="#b85c38"
+                                                                                   Width="13"
+                                                                                   IsVisible="{Binding IsFavorite}" />
+                                                        </Grid>
+                                                    </Button>
                                                 </Grid>
-                                            </Panel>
-                                            <Grid Grid.Row="1" Margin="12" RowDefinitions="Auto, Auto, *">
-                                                <SelectableTextBlock FontWeight="Bold" Text="{Binding Title}" 
-                                                                     TextTrimming="CharacterEllipsis"/>
+                                            </Grid>
+                                            <Grid Grid.Row="1" Margin="12"
+                                                  RowDefinitions="{OnPlatform Default='Auto,Auto,*', Android='Auto,Auto,Auto', iOS='Auto,Auto,Auto'}">
+                                                <SelectableTextBlock FontWeight="Bold" Text="{Binding Title}"
+                                                                     TextTrimming="CharacterEllipsis" />
                                                 <SelectableTextBlock Grid.Row="1" FontWeight="Bold"
-                                                                     Text="{Binding Creator}" Classes="Tertiary" 
-                                                                     TextTrimming="CharacterEllipsis"/>
-                                                <Grid Grid.Row="2" ColumnDefinitions="*,*" VerticalAlignment="Bottom">
+                                                                     Text="{Binding Creator}" Classes="Tertiary"
+                                                                     TextTrimming="CharacterEllipsis" />
+                                                <Grid Grid.Row="2" ColumnDefinitions="Auto,*"
+                                                      VerticalAlignment="Bottom"
+                                                      IsVisible="{OnPlatform Default=True, Android=False, iOS=False}">
                                                     <StackPanel Orientation="Horizontal">
                                                         <u:Rating DefaultValue="{Binding Stars}" AllowHalf="True"
                                                                   IsEnabled="False" AllowClear="False" Size="8"
+                                                                  Margin="-6,0,0,0"
                                                                   VerticalAlignment="Center" />
                                                         <TextBlock Grid.Column="1" Text="{Binding Rating}"
-                                                                   FontSize="11" VerticalAlignment="Center" />
+                                                                   Margin="4,0,0,0" FontSize="11"
+                                                                   VerticalAlignment="Center" />
                                                     </StackPanel>
                                                     <TextBlock Grid.Column="1" Text="{Binding GenresString}"
                                                                FontSize="11" VerticalAlignment="Center"
-                                                               Classes="Tertiary" HorizontalAlignment="Right" />
+                                                               Classes="Tertiary" HorizontalAlignment="Right"
+                                                               TextTrimming="CharacterEllipsis"
+                                                               ToolTip.Tip="{Binding GenresStringFull}" />
                                                 </Grid>
+                                                <controls:ResponsiveMetadataPanel Grid.Row="2"
+                                                                                  VerticalAlignment="Bottom"
+                                                                                  IsVisible="{OnPlatform Default=False, Android=True, iOS=True}">
+                                                    <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                                                        <u:Rating DefaultValue="{Binding Stars}" AllowHalf="True"
+                                                                  IsEnabled="False" AllowClear="False" Size="8"
+                                                                  Margin="-2,0,0,0"
+                                                                  VerticalAlignment="Center" />
+                                                        <TextBlock Text="{Binding Rating}" Margin="6,0,0,0"
+                                                                   FontSize="11" VerticalAlignment="Center" />
+                                                    </StackPanel>
+                                                    <TextBlock Text="{Binding GenresString}"
+                                                               FontSize="10" Classes="Tertiary"
+                                                               TextWrapping="Wrap"
+                                                               VerticalAlignment="Center"
+                                                               ToolTip.Tip="{Binding GenresStringFull}" />
+                                                </controls:ResponsiveMetadataPanel>
                                             </Grid>
                                         </Grid>
                                     </Border>
