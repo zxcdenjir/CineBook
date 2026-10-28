@@ -72,7 +72,7 @@
     <Grid RowDefinitions="Auto, *">
         <Grid
             Margin="{OnPlatform Default='25', Android='12', iOS='12'}"
-            ColumnDefinitions="{OnPlatform Default='*, Auto, Auto, Auto', Android='*', iOS='*'}"
+            ColumnDefinitions="{OnPlatform Default='*, Auto, Auto, Auto, Auto', Android='*', iOS='*'}"
             ColumnSpacing="{OnPlatform Default='12', Android='0', iOS='0'}">
             <TextBox PlaceholderText="Поиск" Padding="12" CornerRadius="22">
                 <TextBox.InnerLeftContent>
