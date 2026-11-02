@@ -1,0 +1,42 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:u="https://irihi.tech/ursa"
+             xmlns:viewModels="clr-namespace:CineBook.ViewModels"
+             mc:Ignorable="d" d:DesignWidth="400" d:DesignHeight="450"
+             x:Class="CineBook.Views.FiltersView"
+             x:DataType="viewModels:FiltersViewModel">
+    <Design.DataContext>
+        <viewModels:FiltersViewModel/>
+    </Design.DataContext>
+    <u:Form HorizontalAlignment="Stretch">
+        <ItemsControl ItemsSource="{Binding AllGenres}" u:FormItem.Label="Жанры">
+            <ItemsControl.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <WrapPanel Orientation="Horizontal" ItemSpacing="8" LineSpacing="8"/>
+                </ItemsPanelTemplate>
+            </ItemsControl.ItemsPanel>
+            
+            <ItemsControl.ItemTemplate>
+                <DataTemplate>
+                    <ToggleButton
+                        Content="{Binding Name}"
+                        IsChecked="{Binding IsSelected}"/>
+                </DataTemplate>
+            </ItemsControl.ItemTemplate>
+        </ItemsControl>
+        <Grid ColumnDefinitions="*,*" ColumnSpacing="12" u:FormItem.Label="Сортировка">
+            <StackPanel Spacing="12">
+                <RadioButton Content="По дате добавления"/>
+                <RadioButton Content="По рейтингу"/>
+                <RadioButton Content="По алфавиту"/>
+            </StackPanel>
+            <StackPanel Grid.Column="1" Spacing="12">
+                <RadioButton Content="По возрастанию"/>
+                <RadioButton Content="По убыванию"/>
+            </StackPanel>
+        </Grid>
+        
+    </u:Form>
+</UserControl>

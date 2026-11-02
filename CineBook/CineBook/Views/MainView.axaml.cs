@@ -4,11 +4,12 @@ using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.Notifications;
 using CineBook.ViewModels;
+using CryptoPortfolio_Tracker.Controls;
 using Ursa.Controls;
 
 namespace CineBook.Views;
 
-public partial class MainView : NavigationPage
+public partial class MainView : UrsaNavigationPage
 {
     public static MainView Current = null!;
     
@@ -20,7 +21,7 @@ public partial class MainView : NavigationPage
         Current = this;
     }
 
-    protected override void OnAttachedToVisualTree(VisualTreeAttachmentEventArgs e)
+    protected override async void OnAttachedToVisualTree(VisualTreeAttachmentEventArgs e)
     {
         base.OnAttachedToVisualTree(e);
         
@@ -32,7 +33,8 @@ public partial class MainView : NavigationPage
         };
 
         PropertyChanged += OnMainViewPropertyChanged;
-        PushAsync(new HomePage
+        
+        await PushAsync(new HomePage
         {
             DataContext = new HomePageViewModel()
         });

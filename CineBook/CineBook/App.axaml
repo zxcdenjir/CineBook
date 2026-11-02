@@ -5,6 +5,7 @@
              xmlns:semi="https://irihi.tech/semi"
              xmlns:materialIcons="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
              xmlns:u="https://irihi.tech/ursa"
+             xmlns:recolor="https://irihi.tech/semi.recolor"
              RequestedThemeVariant="Default">
 
     <Application.Resources>
@@ -37,6 +38,13 @@
                     <SolidColorBrush x:Key="ButtonOutlinePointeroverBackground" Color="#EAE1D4" />
                     <SolidColorBrush x:Key="ButtonOutlinePressedBackground" Color="#DED1BF" />
 
+                    <SolidColorBrush x:Key="ToggleButtonUncheckedBackground" Color="#F1EBE2" />
+                    <SolidColorBrush x:Key="ToggleButtonUncheckedBorder" Color="#E7DFD3" />
+
+                    <SolidColorBrush x:Key="ToggleButtonCheckedBackground" Color="#F8EAE4" />
+                    <SolidColorBrush x:Key="ToggleButtonCheckedForeground" Color="#914329" />
+                    <SolidColorBrush x:Key="ToggleButtonCheckedBorder" Color="#B85C38" />
+
                     <SolidColorBrush x:Key="ButtonSolidPrimaryBackground" Color="#B85C38" />
                     <SolidColorBrush x:Key="ButtonSolidPrimaryBorderBrush" Color="#B85C38" />
 
@@ -56,8 +64,8 @@
                     <SolidColorBrush x:Key="CineBookAccentHover" Color="#A64F30" />
                     <SolidColorBrush x:Key="CineBookAccentPressed" Color="#914329" />
 
-                    <SolidColorBrush x:Key="CardBackground" Color="#FFFFFF"/>
-                    <SolidColorBrush x:Key="HeartBackground" Color="#f3f2f5"/>
+                    <SolidColorBrush x:Key="CardBackground" Color="#FFFFFF" />
+                    <SolidColorBrush x:Key="HeartBackground" Color="#f3f2f5" />
 
                     <SolidColorBrush x:Key="StatusWatchedText" Color="#3E7C4F" />
                     <SolidColorBrush x:Key="StatusWatchedBackground" Color="#E4F0E4" />
@@ -94,6 +102,13 @@
                     <SolidColorBrush x:Key="ButtonOutlinePointeroverBackground" Color="#372D23" />
                     <SolidColorBrush x:Key="ButtonOutlinePressedBackground" Color="#433629" />
 
+                    <SolidColorBrush x:Key="ToggleButtonUncheckedBackground" Color="#2D261F" />
+                    <SolidColorBrush x:Key="ToggleButtonUncheckedBorder" Color="#463D33" />
+
+                    <SolidColorBrush x:Key="ToggleButtonCheckedBackground" Color="#39271F" />
+                    <SolidColorBrush x:Key="ToggleButtonCheckedForeground" Color="#E6C2AE" />
+                    <SolidColorBrush x:Key="ToggleButtonCheckedBorder" Color="#B85C38" />
+
                     <SolidColorBrush x:Key="ButtonSolidPrimaryBackground" Color="#B85C38" />
                     <SolidColorBrush x:Key="ButtonSolidPrimaryBorderBrush" Color="#B85C38" />
 
@@ -113,8 +128,8 @@
                     <SolidColorBrush x:Key="CineBookAccentHover" Color="#A64F30" />
                     <SolidColorBrush x:Key="CineBookAccentPressed" Color="#914329" />
 
-                    <SolidColorBrush x:Key="CardBackground" Color="#2C2620"/>
-                    <SolidColorBrush x:Key="HeartBackground" Color="#2d2b27"/>
+                    <SolidColorBrush x:Key="CardBackground" Color="#2C2620" />
+                    <SolidColorBrush x:Key="HeartBackground" Color="#2d2b27" />
 
                     <SolidColorBrush x:Key="StatusWatchedText" Color="#8CC49A" />
                     <SolidColorBrush x:Key="StatusWatchedBackground" Color="#26372B" />
@@ -125,6 +140,35 @@
 
                 </ResourceDictionary>
             </ResourceDictionary.ThemeDictionaries>
+
+            <ControlTheme x:Key="CineBookToggleButtonTheme"
+                          TargetType="ToggleButton"
+                          BasedOn="{StaticResource {x:Type ToggleButton}}">
+                <Setter Property="CornerRadius" Value="12" />
+                <Setter Property="Padding" Value="12" />
+                <Setter Property="Foreground" Value="{DynamicResource MyButtonForeground}" />
+                <Setter Property="Background" Value="{DynamicResource ToggleButtonUncheckedBackground}" />
+                <Setter Property="BorderBrush" Value="{DynamicResource ToggleButtonUncheckedBorder}" />
+                <Setter Property="BorderThickness" Value="1" />
+
+                <Style Selector="^:pointerover">
+                    <Setter Property="Background" Value="{DynamicResource ButtonOutlinePointeroverBackground}" />
+                </Style>
+                <Style Selector="^:pressed">
+                    <Setter Property="Background" Value="{DynamicResource ButtonOutlinePressedBackground}" />
+                </Style>
+                <Style Selector="^:checked">
+                    <Setter Property="Background" Value="{DynamicResource ToggleButtonCheckedBackground}" />
+                    <Setter Property="Foreground" Value="{DynamicResource ToggleButtonCheckedForeground}" />
+                    <Setter Property="BorderBrush" Value="{DynamicResource ToggleButtonCheckedBorder}" />
+                </Style>
+                <Style Selector="^:checked:pointerover">
+                    <Setter Property="Background" Value="{DynamicResource SemiColorPrimaryLightPointerover}" />
+                </Style>
+                <Style Selector="^:checked:pressed">
+                    <Setter Property="Background" Value="{DynamicResource SemiColorPrimaryLightActive}" />
+                </Style>
+            </ControlTheme>
         </ResourceDictionary>
     </Application.Resources>
 
@@ -132,6 +176,8 @@
         <semi:SemiTheme Locale="ru-RU" />
         <semi:SemiPopupAnimations />
         <semi:UrsaSemiTheme Locale="ru-RU" />
+        <recolor:SemiThemeRecolor PrimaryColor="#B85C38" BackgroundColorLight="#FAF7F2" BackgroundColorDark="#201B16"
+                                  EnableHaptic="True" HapticType="Click" />
         <materialIcons:MaterialIconStyles />
 
         <Style Selector="TextBox">
@@ -155,6 +201,10 @@
             <Setter Property="Theme" Value="{StaticResource OutlineButton}" />
             <Setter Property="Foreground" Value="{DynamicResource MyButtonForeground}" />
             <Setter Property="BorderBrush" Value="{DynamicResource SemiColorBorder}" />
+        </Style>
+
+        <Style Selector="ToggleButton">
+            <Setter Property="Theme" Value="{StaticResource CineBookToggleButtonTheme}" />
         </Style>
 
         <Style Selector="u|IconButton">
@@ -301,6 +351,58 @@
         </Style>
         <Style Selector="Border.StatusPill[Tag=3] TextBlock">
             <Setter Property="Foreground" Value="{DynamicResource StatusPlanningText}" />
+        </Style>
+
+        <Style Selector="materialIcons|MaterialIcon">
+            <Setter Property="Height" Value="20" />
+        </Style>
+
+        <Style Selector="ContentPage">
+            <Setter Property="HeaderTemplate">
+                <DataTemplate>
+                    <Grid ColumnDefinitions="46, *" ColumnSpacing="12">
+                        <Image Source="/Assets/Icon.png" />
+                        <TextBlock Grid.Column="1" Text="CineBook"
+                                   FontWeight="Bold"
+                                   VerticalAlignment="Center"
+                                   FontSize="20" />
+                    </Grid>
+                </DataTemplate>
+            </Setter>
+        </Style>
+
+        <Style Selector="NavigationPage:nav-bar-inset /template/ Border#PART_NavigationBar">
+            <Setter Property="Margin"
+                    Value="{OnFormFactor Default='24 8 24 0', Mobile='12 0 12 0', x:TypeArguments=Thickness}" />
+            <Style Selector="^ ContentPresenter#PART_TopCommandBar">
+                <Setter Property="VerticalContentAlignment" Value="Center" />
+            </Style>
+        </Style>
+
+        <Style Selector="NavigationPage:nav-bar-inset /template/ ContentPresenter#PART_Header">
+            <Setter Property="Margin" Value="0" />
+        </Style>
+
+        <Style Selector="NavigationPage:nav-bar-inset /template/ Button#PART_BackButton">
+            <Setter Property="Width" Value="44" />
+            <Setter Property="MinWidth" Value="44" />
+            <Setter Property="MinHeight" Value="44" />
+            <Setter Property="Height" Value="44" />
+            <Setter Property="Margin" Value="0 0 12 0" />
+        </Style>
+
+        <Style Selector="u|Form">
+            <Setter Property="ItemsPanel">
+                <Setter.Value>
+                    <ItemsPanelTemplate>
+                        <StackPanel Spacing="12"/>
+                    </ItemsPanelTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style Selector="u|FormItem">
+            <Setter Property="Margin" Value="0 0 0 0"/>
         </Style>
     </Application.Styles>
 </Application>

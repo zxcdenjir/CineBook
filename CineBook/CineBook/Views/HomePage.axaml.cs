@@ -8,8 +8,11 @@ namespace CineBook.Views;
 
 public partial class HomePage : ContentPage
 {
+    public static HomePage Current = null!;
+    
     public HomePage()
     {
         InitializeComponent();
+        Current = this;
     }
 }

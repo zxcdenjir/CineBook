@@ -1,14 +1,16 @@
-﻿<NavigationPage xmlns="https://github.com/avaloniaui"
-            xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-            xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-            xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-            xmlns:vm="using:CineBook.ViewModels"
-            mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
-            x:Class="CineBook.Views.MainView"
-            x:DataType="vm:MainViewModel">
+﻿<controls:UrsaNavigationPage xmlns="https://github.com/avaloniaui"
+                xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+                xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+                xmlns:vm="using:CineBook.ViewModels"
+                xmlns:r="clr-namespace:Semi.Avalonia.Recolor.Ursa;assembly=Semi.Avalonia.Recolor.Ursa"
+                xmlns:controls="clr-namespace:CryptoPortfolio_Tracker.Controls"
+                mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+                x:Class="CineBook.Views.MainView"
+                x:DataType="vm:MainViewModel"
+                BarHeight="{OnFormFactor Default=94, Mobile=70}"
+                Padding="{OnFormFactor Default='24 8 24 24', Mobile='12 0 12 12', x:TypeArguments=Thickness}">
     <Design.DataContext>
-        <!-- This only sets the DataContext for the previewer in an IDE,
-             to set the actual DataContext for runtime, set the DataContext property in code (look at App.axaml.cs) -->
         <vm:MainViewModel />
     </Design.DataContext>
-</NavigationPage>
+</controls:UrsaNavigationPage>

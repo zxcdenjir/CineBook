@@ -51,6 +51,8 @@ public partial class MediaItem : ObservableObject
     public int StatusId { get; set; }
 
     public string? PosterPath { get; set; }
+    
+    public string AdditionDateTime { get; set; }
 
     [ObservableProperty] public partial bool IsFavorite { get; set; }
 
