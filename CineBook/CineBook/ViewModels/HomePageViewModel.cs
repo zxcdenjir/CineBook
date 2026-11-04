@@ -410,11 +410,28 @@ public partial class HomePageViewModel : ViewModelBase
     [RelayCommand]
     private async Task AddMediaAsync() => await OpenMediaEditorAsync(new AddMediaViewModel(), "Добавить медиа");
 
+    public async Task AddRecommendedMediaAsync(OnlineMediaRecommendation recommendation)
+    {
+        if (recommendation.IsAdded)
+            return;
+
+        try
+        {
+            await OpenMediaEditorAsync(new AddMediaViewModel(recommendation), "Добавить медиа",
+                () => recommendation.IsAdded = true);
+        }
+        catch (Exception exception)
+        {
+            MainView.Current.ShowToast(exception.InnerException?.Message ?? exception.Message,
+                NotificationType.Error);
+        }
+    }
+
     [RelayCommand]
     private async Task EditMediaAsync(MediaItem item) =>
         await OpenMediaEditorAsync(new AddMediaViewModel(item), "Изменить медиа");
 
-    private async Task OpenMediaEditorAsync(AddMediaViewModel viewModel, string title)
+    private async Task OpenMediaEditorAsync(AddMediaViewModel viewModel, string title, Action? onSaved = null)
     {
         try
         {
@@ -476,6 +493,7 @@ public partial class HomePageViewModel : ViewModelBase
                     await LoadAsync();
                     MainView.Current.ShowToast(viewModel.IsEditing ? "Изменения сохранены" : "Медиа добавлено",
                         NotificationType.Success);
+                    onSaved?.Invoke();
                     return;
                 }
             }

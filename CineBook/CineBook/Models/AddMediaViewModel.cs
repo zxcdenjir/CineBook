@@ -36,6 +36,7 @@ public partial class AddMediaViewModel : ObservableValidator, IDialogContext
 
     private readonly int? _mediaItemId;
     private readonly HashSet<int> _selectedGenreIds = [];
+    private readonly HashSet<string> _recommendedGenreNames = new(StringComparer.CurrentCultureIgnoreCase);
     private readonly HashSet<string> _pendingPosterPaths = [];
     private readonly string? _originalPosterPath;
     private readonly List<CoverImageCandidate> _coverCandidates = [];
@@ -51,6 +52,7 @@ public partial class AddMediaViewModel : ObservableValidator, IDialogContext
     private string? _activeCoverQuery;
     private string? _selectedCoverImageUrl;
     private CoverImageResult? _selectedCoverImage;
+    private Bitmap? _selectedImage;
 
     static AddMediaViewModel()
     {
@@ -81,6 +83,21 @@ public partial class AddMediaViewModel : ObservableValidator, IDialogContext
         SelectedStatusId = mediaItem.StatusId;
         IsFavorite = mediaItem.IsFavorite;
         PosterPath = File.Exists(mediaItem.PosterPath) ? mediaItem.PosterPath : null;
+        if (PosterPath is not null)
+            _selectedImage = new Bitmap(PosterPath);
+    }
+
+    public AddMediaViewModel(OnlineMediaRecommendation recommendation)
+    {
+        SelectedMediaTypeId = recommendation.TypeId - 1;
+        Name = recommendation.Title;
+        Creator = recommendation.Creator;
+        Description = recommendation.Description;
+        Duration = 0;
+        Rating = 0;
+        _recommendedGenreNames.UnionWith(recommendation.GenreNames);
+        SavePoster(recommendation.Poster);
+        _selectedImage = new Bitmap(PosterPath!);
     }
 
     public ObservableCollection<Genre> AllGenres { get; } = [];
@@ -126,7 +143,7 @@ public partial class AddMediaViewModel : ObservableValidator, IDialogContext
 
     public Bitmap? SelectedImage
     {
-        get => null;
+        get => _selectedImage;
         set
         {
             if (value is null)
@@ -136,6 +153,8 @@ public partial class AddMediaViewModel : ObservableValidator, IDialogContext
             {
                 CancelPendingCoverSelection();
                 SavePoster(value);
+                _selectedImage = value;
+                OnPropertyChanged();
                 _selectedCoverImageUrl = null;
                 SetSelectedCoverImage(null);
             }
@@ -174,7 +193,7 @@ public partial class AddMediaViewModel : ObservableValidator, IDialogContext
         AllGenres.Clear();
         foreach (var genre in genres)
         {
-            genre.IsSelected = _selectedGenreIds.Contains(genre.Id);
+            genre.IsSelected = _selectedGenreIds.Contains(genre.Id) || _recommendedGenreNames.Contains(genre.Name);
             AllGenres.Add(genre);
         }
 

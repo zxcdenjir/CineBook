@@ -116,7 +116,8 @@
             <recolor:ImagePicker u:FormItem.Label="Постер"
                                  Image="{Binding SelectedImage, Mode=TwoWay}"
                                  ImagePath="{Binding PosterPath, Mode=TwoWay}"
-                                 CornerRadius="12" Stretch="UniformToFill" />
+                                 CornerRadius="12" Stretch="Uniform"
+                                 MaxHeight="240"/>
 
             <StackPanel Spacing="8" IsVisible="{Binding CanSearchCovers}">
                 <TextBlock Text="{Binding CoverResultsHeader}" FontWeight="SemiBold" />
