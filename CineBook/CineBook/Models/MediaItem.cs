@@ -61,7 +61,7 @@ public partial class MediaItem : ObservableObject
 
     [NotMapped] public bool HasPoster => !string.IsNullOrWhiteSpace(PosterPath) && File.Exists(PosterPath);
     
-    public string AdditionDateTime { get; set; }
+    public string AdditionDateTime { get; set; } = null!;
 
     [ObservableProperty] public partial bool IsFavorite { get; set; }
 
