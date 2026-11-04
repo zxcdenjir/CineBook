@@ -68,12 +68,12 @@ jobs:
       - uses: actions/checkout@v6
       - uses: actions/setup-dotnet@v6
         with:
-          dotnet-version: 10.0.x
+          dotnet-version: 10.0.401
       - name: Install iOS workload
-        run: dotnet workload install ios
+        run: dotnet workload install ios --version 10.0.401
       - name: Publish unsigned iOS IPA
         run: |
-          dotnet publish CineBook/CineBook.iOS/CineBook.iOS.csproj --configuration Release --framework net10.0-ios26.0 --runtime ios-arm64 --output artifacts/ios -p:BuildIpa=true -p:EnableCodeSigning=false -p:IpaPackageDir="$GITHUB_WORKSPACE/artifacts" -p:IpaPackageName=CineBook-ios-arm64
+          dotnet publish CineBook/CineBook.iOS/CineBook.iOS.csproj --configuration Release --framework net10.0-ios26.5 --runtime ios-arm64 --output artifacts/ios -p:BuildIpa=true -p:EnableCodeSigning=false -p:IpaPackageDir="$GITHUB_WORKSPACE/artifacts" -p:IpaPackageName=CineBook-ios-arm64
           ipa=$(find "$GITHUB_WORKSPACE/artifacts" -type f -name 'CineBook-ios-arm64.ipa' -print -quit)
           test -n "$ipa"
           cp "$ipa" "$GITHUB_WORKSPACE/artifacts/CineBook-ios-arm64-ios13-plus.ipa"
