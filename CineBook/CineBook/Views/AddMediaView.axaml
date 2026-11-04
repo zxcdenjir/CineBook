@@ -4,6 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:u="https://irihi.tech/ursa"
              xmlns:avalonia="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
+             xmlns:controls="clr-namespace:CineBook.Controls"
              xmlns:models="clr-namespace:CineBook.Models"
              xmlns:recolor="https://irihi.tech/semi.recolor"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
@@ -116,6 +117,66 @@
                                  Image="{Binding SelectedImage, Mode=TwoWay}"
                                  ImagePath="{Binding PosterPath, Mode=TwoWay}"
                                  CornerRadius="12" Stretch="UniformToFill" />
+
+            <StackPanel Spacing="8" IsVisible="{Binding CanSearchCovers}">
+                <TextBlock Text="{Binding CoverResultsHeader}" FontWeight="SemiBold" />
+                <TextBlock Text="Выбранное изображение сохранится на устройстве вместе с медиа."
+                           Classes="Tertiary" TextWrapping="Wrap" />
+                <TextBlock Text="Ищем изображения…" Classes="Tertiary"
+                           IsVisible="{Binding IsSearchingCovers}" />
+                <TextBlock Text="Загружаем выбранное изображение…" Classes="Tertiary"
+                           IsVisible="{Binding IsSelectingCover}" />
+                <TextBlock Text="{Binding CoverSearchError}" Classes="Tertiary"
+                           IsVisible="{Binding HasCoverSearchError}" />
+                <TextBlock Text="Ничего не найдено" Classes="Tertiary"
+                           IsVisible="{Binding HasNoCoverImages}" />
+                <ItemsControl ItemsSource="{Binding CoverImageResults}">
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <controls:MasonryPanel Columns="{OnFormFactor Default=5, Mobile=2}"
+                                                    ColumnSpacing="8" RowSpacing="8" />
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <Button Padding="0" CornerRadius="8" ClipToBounds="True"
+                                    HorizontalContentAlignment="Stretch"
+                                    ToolTip.Tip="{Binding DisplayName}"
+                                    x:CompileBindings="False"
+                                    Command="{Binding $parent[ItemsControl].DataContext.SelectCoverImageCommand}"
+                                    CommandParameter="{Binding}">
+                                <Grid>
+                                    <Image Source="{Binding Thumbnail}" Stretch="UniformToFill"
+                                           HorizontalAlignment="Stretch" />
+                                    <Border IsVisible="{Binding IsSelected}"
+                                            BorderBrush="{DynamicResource CineBookAccent}"
+                                            BorderThickness="3" CornerRadius="8"
+                                            IsHitTestVisible="False" />
+                                    <Border IsVisible="{Binding IsSelected}"
+                                            HorizontalAlignment="Right" VerticalAlignment="Top"
+                                            Margin="8" Width="28" Height="28" CornerRadius="14"
+                                            Background="{DynamicResource CineBookAccent}"
+                                            IsHitTestVisible="False">
+                                        <avalonia:MaterialIcon Kind="Check" Foreground="White"
+                                                               Width="18" Height="18"
+                                                               HorizontalAlignment="Center"
+                                                               VerticalAlignment="Center" />
+                                    </Border>
+                                </Grid>
+                            </Button>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+                <Button Content="Загрузить ещё 10"
+                        HorizontalAlignment="Center"
+                        IsVisible="{Binding HasMoreCoverImages}"
+                        IsEnabled="{Binding !IsSearchingCovers}"
+                        Command="{Binding LoadMoreCoverImagesCommand}" />
+                <Button Content="Найти изображения"
+                        HorizontalAlignment="Stretch"
+                        IsEnabled="{Binding !IsSearchingCovers}"
+                        Command="{Binding SearchCoverImagesCommand}" />
+            </StackPanel>
 
             <Button IsVisible="{Binding IsEditing}"
                     Command="{Binding DeleteCommand}"

@@ -23,20 +23,26 @@ public partial class HomePage : ContentPage
 
     private async void OnMediaItemTapped(object? sender, TappedEventArgs e)
     {
+        MediaItem? tappedItem = null;
         for (var control = e.Source as Control; control is not null; control = control.GetVisualParent() as Control)
         {
             if (control is Button)
-                return;
-
-            if (control.DataContext is MediaItem item)
             {
                 e.Handled = true;
-                await MainView.Current.PushAsync(new MediaItemView
-                {
-                    DataContext = new MediaItemViewModel(item)
-                });
                 return;
             }
+
+            if (control.DataContext is MediaItem item)
+                tappedItem = item;
         }
+
+        if (tappedItem is null)
+            return;
+
+        e.Handled = true;
+        await MainView.Current.PushAsync(new MediaItemView
+        {
+            DataContext = new MediaItemViewModel(tappedItem)
+        });
     }
 }

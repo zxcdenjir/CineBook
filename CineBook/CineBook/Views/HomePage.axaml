@@ -121,29 +121,186 @@
 
             <DataTemplate x:Key="MediaItemTemplate" DataType="models:MediaItem">
                 <Border BorderThickness="1" BorderBrush="{DynamicResource SemiColorBorder}"
-                        CornerRadius="12" VerticalAlignment="Top" ClipToBounds="True"
+                        CornerRadius="12" VerticalAlignment="Stretch" ClipToBounds="True"
                         Background="{DynamicResource CardBackground}" Cursor="Hand">
-                    <Grid RowDefinitions="{OnPlatform Default='108,92', Android='108,Auto', iOS='108,Auto'}">
-                        <Grid Grid.Row="0">
-                            <Border CornerRadius="11,11,0,0" ClipToBounds="True" IsVisible="{Binding HasPoster}">
-                                <controls:PosterImage PosterPath="{Binding PosterPath}" Stretch="UniformToFill" />
-                            </Border>
-                            <Border Background="{Binding PosterPlaceholderBrush}" CornerRadius="11,11,0,0"
-                                    IsVisible="{Binding !HasPoster}" />
-                            <Path Data="{Binding PosterPlaceholderIcon}"
-                                  Width="28" Height="28" Stretch="Uniform"
-                                  Stroke="#EFFFFFFF" StrokeThickness="2.5"
-                                  StrokeLineCap="Round" StrokeJoin="Round"
-                                  HorizontalAlignment="Center" VerticalAlignment="Center" Opacity="0.9"
-                                  IsVisible="{Binding !HasPoster}" />
-                            <Grid ColumnDefinitions="*,Auto,Auto" VerticalAlignment="Top" Margin="8" ColumnSpacing="8">
-                                <Border Tag="{Binding StatusId}" Classes="StatusPill" CornerRadius="999"
-                                        Padding="9,4" VerticalAlignment="Top" HorizontalAlignment="Left">
-                                    <TextBlock Text="{Binding Status.Name}" FontSize="11" FontWeight="Bold" />
+                    <Grid ColumnDefinitions="{OnFormFactor Default='84,*', Mobile='*,Auto'}"
+                          RowDefinitions="{OnFormFactor Default='*', Mobile='Auto,*'}">
+                        <controls:AspectRatioPanel Grid.Row="0" Grid.Column="0" AspectRatio="0.675676"
+                                                   VerticalAlignment="Top">
+                            <Grid>
+                                <Border CornerRadius="{OnFormFactor Default='11,0,0,11', Mobile='11,11,0,0'}"
+                                        ClipToBounds="True" IsVisible="{Binding HasPoster}">
+                                    <controls:PosterImage PosterPath="{Binding PosterPath}" Stretch="UniformToFill" />
                                 </Border>
-                                <Button Grid.Column="1" Height="24" Width="24"
-                                        VerticalAlignment="Top" HorizontalAlignment="Right"
-                                        MinHeight="0" MinWidth="0" CornerRadius="12" Padding="0"
+                                <Border Background="{Binding PosterPlaceholderBrush}"
+                                        CornerRadius="{OnFormFactor Default='11,0,0,11', Mobile='11,11,0,0'}"
+                                        IsVisible="{Binding !HasPoster}" />
+                                <Path Data="{Binding PosterPlaceholderIcon}"
+                                      Width="28" Height="28" Stretch="Uniform"
+                                      Stroke="#EFFFFFFF" StrokeThickness="2.5"
+                                      StrokeLineCap="Round" StrokeJoin="Round"
+                                      HorizontalAlignment="Center" VerticalAlignment="Center" Opacity="0.9"
+                                      IsVisible="{Binding !HasPoster}" />
+                                <Grid ColumnDefinitions="*,Auto,Auto" VerticalAlignment="Top"
+                                      Margin="{OnFormFactor Default='6', Mobile='8'}"
+                                      ColumnSpacing="{OnFormFactor Default='4', Mobile='8'}"
+                                      IsVisible="{OnFormFactor Default='False', Mobile='True'}">
+                                    <Border Tag="{Binding StatusId}" Classes="StatusPill" CornerRadius="999"
+                                            Padding="9,4" VerticalAlignment="Top" HorizontalAlignment="Left"
+                                            IsVisible="{OnFormFactor Default='False', Mobile='True'}">
+                                        <TextBlock Text="{Binding Status.Name}" FontSize="11" FontWeight="Bold" />
+                                    </Border>
+                                    <Button Grid.Column="1"
+                                            Height="{OnFormFactor Default='22', Mobile='28'}"
+                                            Width="{OnFormFactor Default='22', Mobile='28'}"
+                                            MinHeight="0" MinWidth="0"
+                                            CornerRadius="{OnFormFactor Default='11', Mobile='14'}" Padding="0"
+                                            Background="{DynamicResource HeartBackground}"
+                                            ToolTip.Tip="Изменить"
+                                            x:CompileBindings="False"
+                                            Command="{Binding $parent[ItemsControl].DataContext.EditMediaCommand}"
+                                            CommandParameter="{Binding}">
+                                        <avalonia:MaterialIcon Kind="Pencil"
+                                                               Foreground="{DynamicResource MyButtonForeground}"
+                                                               Width="{OnFormFactor Default='12', Mobile='15'}" />
+                                    </Button>
+                                    <Button Grid.Column="2"
+                                            Height="{OnFormFactor Default='22', Mobile='28'}"
+                                            Width="{OnFormFactor Default='22', Mobile='28'}"
+                                            MinHeight="0" MinWidth="0"
+                                            CornerRadius="{OnFormFactor Default='11', Mobile='14'}" Padding="0"
+                                            Background="{DynamicResource HeartBackground}"
+                                            x:CompileBindings="False"
+                                            Command="{Binding $parent[ItemsControl].DataContext.ToggleFavoriteCommand}"
+                                            CommandParameter="{Binding}">
+                                        <Grid>
+                                            <avalonia:MaterialIcon Kind="HeartOutline" Foreground="#9C948A"
+                                                                   Width="{OnFormFactor Default='12', Mobile='15'}"
+                                                                   IsVisible="{Binding !IsFavorite}" />
+                                            <avalonia:MaterialIcon Kind="Heart" Foreground="#b85c38"
+                                                                   Width="{OnFormFactor Default='12', Mobile='15'}"
+                                                                   IsVisible="{Binding IsFavorite}" />
+                                        </Grid>
+                                    </Button>
+                                </Grid>
+                            </Grid>
+                        </controls:AspectRatioPanel>
+                        <Grid Grid.Row="0" Grid.Column="1" Margin="10,4"
+                              RowDefinitions="Auto,Auto,Auto,*,Auto,Auto" RowSpacing="2"
+                              VerticalAlignment="Stretch"
+                              IsVisible="{OnFormFactor Default='True', Mobile='False'}">
+                            <Grid ColumnDefinitions="*,Auto,Auto" ColumnSpacing="4">
+                                <Border Tag="{Binding StatusId}" Classes="StatusPill" CornerRadius="999"
+                                        Padding="6,3" VerticalAlignment="Center" HorizontalAlignment="Left">
+                                    <TextBlock Text="{Binding Status.Name}" FontSize="10" FontWeight="Bold" />
+                                </Border>
+                                <Button Grid.Column="1" Height="22" Width="22" MinHeight="0" MinWidth="0"
+                                        CornerRadius="11" Padding="0"
+                                        Background="{DynamicResource HeartBackground}"
+                                        ToolTip.Tip="Изменить"
+                                        x:CompileBindings="False"
+                                        Command="{Binding $parent[ItemsControl].DataContext.EditMediaCommand}"
+                                        CommandParameter="{Binding}">
+                                    <avalonia:MaterialIcon Kind="Pencil"
+                                                           Foreground="{DynamicResource MyButtonForeground}"
+                                                           Width="12" />
+                                </Button>
+                                <Button Grid.Column="2" Height="22" Width="22" MinHeight="0" MinWidth="0"
+                                        CornerRadius="11" Padding="0"
+                                        Background="{DynamicResource HeartBackground}"
+                                        x:CompileBindings="False"
+                                        Command="{Binding $parent[ItemsControl].DataContext.ToggleFavoriteCommand}"
+                                        CommandParameter="{Binding}">
+                                    <Grid>
+                                        <avalonia:MaterialIcon Kind="HeartOutline" Foreground="#9C948A" Width="12"
+                                                               IsVisible="{Binding !IsFavorite}" />
+                                        <avalonia:MaterialIcon Kind="Heart" Foreground="#b85c38" Width="12"
+                                                               IsVisible="{Binding IsFavorite}" />
+                                    </Grid>
+                                </Button>
+                            </Grid>
+                            <SelectableTextBlock Grid.Row="1" FontWeight="Bold" Text="{Binding Title}"
+                                                 TextWrapping="Wrap" TextTrimming="CharacterEllipsis" />
+                            <SelectableTextBlock Grid.Row="2" FontWeight="Bold" Text="{Binding Creator}"
+                                                 Classes="Tertiary" TextWrapping="Wrap"
+                                                 TextTrimming="CharacterEllipsis" />
+                            <StackPanel Grid.Row="4" Orientation="Horizontal" VerticalAlignment="Center">
+                                <u:Rating DefaultValue="{Binding Stars}" AllowHalf="True"
+                                          IsEnabled="False" AllowClear="False" Size="8"
+                                          Margin="-2,0,0,0" VerticalAlignment="Center" />
+                                <TextBlock Text="{Binding Rating}" Margin="4,0,0,0" FontSize="11"
+                                           VerticalAlignment="Center" />
+                            </StackPanel>
+                            <TextBlock Grid.Row="5" Text="{Binding GenresString}" FontSize="11"
+                                       Classes="Tertiary" TextWrapping="Wrap" VerticalAlignment="Bottom"
+                                       ToolTip.Tip="{Binding GenresStringFull}" />
+                        </Grid>
+                        <Grid Grid.Row="1" Grid.Column="0" Margin="12"
+                              RowDefinitions="Auto,Auto,*,Auto,Auto" RowSpacing="5"
+                              IsVisible="{OnFormFactor Default='False', Mobile='True'}">
+                            <SelectableTextBlock FontWeight="Bold" Text="{Binding Title}"
+                                                 TextWrapping="Wrap" TextTrimming="CharacterEllipsis" />
+                            <SelectableTextBlock Grid.Row="1" FontWeight="Bold" Text="{Binding Creator}"
+                                                 Classes="Tertiary" TextWrapping="Wrap"
+                                                 TextTrimming="CharacterEllipsis" />
+                            <StackPanel Grid.Row="3" Orientation="Horizontal" VerticalAlignment="Center">
+                                <u:Rating DefaultValue="{Binding Stars}" AllowHalf="True"
+                                          IsEnabled="False" AllowClear="False" Size="8"
+                                          Margin="-2,0,0,0" VerticalAlignment="Center" />
+                                <TextBlock Text="{Binding Rating}" Margin="4,0,0,0" FontSize="11"
+                                           VerticalAlignment="Center" />
+                            </StackPanel>
+                            <TextBlock Grid.Row="4" Text="{Binding GenresString}" FontSize="10"
+                                       Classes="Tertiary" TextWrapping="Wrap" VerticalAlignment="Center"
+                                       ToolTip.Tip="{Binding GenresStringFull}" />
+                        </Grid>
+                    </Grid>
+                </Border>
+            </DataTemplate>
+
+            <DataTemplate x:Key="MediaItemListTemplate" DataType="models:MediaItem">
+                <Border BorderThickness="1" BorderBrush="{DynamicResource SemiColorBorder}"
+                        CornerRadius="12" Padding="12" VerticalAlignment="Top" ClipToBounds="True"
+                        Background="{DynamicResource CardBackground}" Cursor="Hand">
+                    <Grid>
+                        <Grid ColumnDefinitions="30,1.5*,Auto,1.5*,Auto,Auto" Height="44" ColumnSpacing="16"
+                              IsVisible="{OnFormFactor Default='True', Mobile='False'}">
+                            <Grid Grid.Column="0">
+                                <Border CornerRadius="10" ClipToBounds="True" IsVisible="{Binding HasPoster}">
+                                    <controls:PosterImage PosterPath="{Binding PosterPath}" Stretch="UniformToFill" />
+                                </Border>
+                                <Border Background="{Binding PosterPlaceholderBrush}" CornerRadius="10"
+                                        IsVisible="{Binding !HasPoster}" />
+                                <Path Data="{Binding PosterPlaceholderIcon}"
+                                      Width="12" Height="12" Stretch="Uniform"
+                                      Stroke="#EFFFFFFF" StrokeThickness="1.5"
+                                      StrokeLineCap="Round" StrokeJoin="Round"
+                                      HorizontalAlignment="Center" VerticalAlignment="Center" Opacity="0.9"
+                                      IsVisible="{Binding !HasPoster}" />
+                            </Grid>
+                            <StackPanel Grid.Column="1" VerticalAlignment="Center" Spacing="2">
+                                <SelectableTextBlock FontWeight="Bold" Text="{Binding Title}"
+                                                     TextTrimming="CharacterEllipsis" />
+                                <SelectableTextBlock Text="{Binding Creator}" Classes="Tertiary"
+                                                     TextTrimming="CharacterEllipsis" />
+                            </StackPanel>
+                            <StackPanel Grid.Column="2" Orientation="Horizontal" VerticalAlignment="Center"
+                                        Spacing="4">
+                                <u:Rating DefaultValue="{Binding Stars}" AllowHalf="True"
+                                          IsEnabled="False" AllowClear="False" Size="10" />
+                                <TextBlock Text="{Binding Rating}" FontSize="12" VerticalAlignment="Center" />
+                            </StackPanel>
+                            <TextBlock Grid.Column="3" Text="{Binding GenresStringFull}" Classes="Tertiary"
+                                       VerticalAlignment="Center" TextTrimming="CharacterEllipsis"
+                                       ToolTip.Tip="{Binding GenresStringFull}" />
+                            <Border Grid.Column="4" Tag="{Binding StatusId}" Classes="StatusPill"
+                                    CornerRadius="999" VerticalAlignment="Center" Padding="9,4">
+                                <TextBlock Text="{Binding Status.Name}" FontSize="11" FontWeight="Bold" />
+                            </Border>
+                            <StackPanel Grid.Column="5" Orientation="Horizontal" VerticalAlignment="Center"
+                                        Spacing="8">
+                                <Button Height="24" Width="24" MinHeight="0" MinWidth="0"
+                                        CornerRadius="12" Padding="0"
                                         Background="{DynamicResource HeartBackground}"
                                         ToolTip.Tip="Изменить"
                                         x:CompileBindings="False"
@@ -153,9 +310,8 @@
                                                            Foreground="{DynamicResource MyButtonForeground}"
                                                            Width="13" />
                                 </Button>
-                                <Button Grid.Column="2" Height="24" Width="24"
-                                        VerticalAlignment="Top" HorizontalAlignment="Right"
-                                        MinHeight="0" MinWidth="0" CornerRadius="12" Padding="0"
+                                <Button Height="24" Width="24" MinHeight="0" MinWidth="0"
+                                        CornerRadius="12" Padding="0"
                                         Background="{DynamicResource HeartBackground}"
                                         x:CompileBindings="False"
                                         Command="{Binding $parent[ItemsControl].DataContext.ToggleFavoriteCommand}"
@@ -167,108 +323,62 @@
                                                                IsVisible="{Binding IsFavorite}" />
                                     </Grid>
                                 </Button>
-                            </Grid>
+                            </StackPanel>
                         </Grid>
-                        <Grid Grid.Row="1" Margin="12"
-                              RowDefinitions="{OnPlatform Default='Auto,Auto,*', Android='Auto,Auto,Auto', iOS='Auto,Auto,Auto'}">
-                            <SelectableTextBlock FontWeight="Bold" Text="{Binding Title}"
-                                                 TextTrimming="CharacterEllipsis" />
-                            <SelectableTextBlock Grid.Row="1" FontWeight="Bold" Text="{Binding Creator}"
-                                                 Classes="Tertiary" TextTrimming="CharacterEllipsis" />
-                            <Grid Grid.Row="2" ColumnDefinitions="Auto,*" VerticalAlignment="Bottom"
-                                  IsVisible="{OnPlatform Default=True, Android=False, iOS=False}">
-                                <StackPanel Orientation="Horizontal" VerticalAlignment="Bottom">
-                                    <u:Rating DefaultValue="{Binding Stars}" AllowHalf="True"
-                                              IsEnabled="False" AllowClear="False" Size="8"
-                                              Margin="-2,0,0,0" VerticalAlignment="Center" />
-                                    <TextBlock Text="{Binding Rating}" Margin="4,0,0,0" FontSize="11"
-                                               VerticalAlignment="Center" />
-                                </StackPanel>
-                                <TextBlock Grid.Column="1" Text="{Binding GenresString}" FontSize="11"
-                                           VerticalAlignment="Center" Classes="Tertiary" HorizontalAlignment="Right"
-                                           TextTrimming="CharacterEllipsis" ToolTip.Tip="{Binding GenresStringFull}" />
-                            </Grid>
-                            <controls:ResponsiveMetadataPanel Grid.Row="2" VerticalAlignment="Bottom"
-                                                              IsVisible="{OnPlatform Default=False, Android=True, iOS=True}">
-                                <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
-                                    <u:Rating DefaultValue="{Binding Stars}" AllowHalf="True"
-                                              IsEnabled="False" AllowClear="False" Size="8"
-                                              Margin="-2,0,0,0" VerticalAlignment="Center" />
-                                    <TextBlock Text="{Binding Rating}" Margin="6,0,0,0" FontSize="11"
-                                               VerticalAlignment="Center" />
-                                </StackPanel>
-                                <TextBlock Text="{Binding GenresString}" FontSize="10" Classes="Tertiary"
-                                           TextWrapping="Wrap" VerticalAlignment="Center"
-                                           ToolTip.Tip="{Binding GenresStringFull}" />
-                            </controls:ResponsiveMetadataPanel>
-                        </Grid>
-                    </Grid>
-                </Border>
-            </DataTemplate>
 
-            <DataTemplate x:Key="MediaItemListTemplate" DataType="models:MediaItem">
-                <Border BorderThickness="1" BorderBrush="{DynamicResource SemiColorBorder}"
-                        CornerRadius="12" Padding="12" VerticalAlignment="Top" ClipToBounds="True"
-                        Background="{DynamicResource CardBackground}" Cursor="Hand">
-                    <Grid ColumnDefinitions="36, *, Auto, Auto" Height="36" ColumnSpacing="{OnFormFactor Mobile='8', Default='12'}">
-                        <Grid Grid.Column="0">
-                            <Border CornerRadius="10" ClipToBounds="True" IsVisible="{Binding HasPoster}">
-                                <controls:PosterImage PosterPath="{Binding PosterPath}" Stretch="UniformToFill" />
-                            </Border>
-                            <Border Background="{Binding PosterPlaceholderBrush}" CornerRadius="10"
-                                    IsVisible="{Binding !HasPoster}" />
-                            <Path Data="{Binding PosterPlaceholderIcon}"
-                                  Width="10" Height="10" Stretch="Uniform"
-                                  Stroke="#EFFFFFFF" StrokeThickness="1.5"
-                                  StrokeLineCap="Round" StrokeJoin="Round"
-                                  HorizontalAlignment="Center" VerticalAlignment="Center" Opacity="0.9"
-                                  IsVisible="{Binding !HasPoster}" />
-                        </Grid>
-                        
-                        <Grid Grid.Column="1" RowDefinitions="Auto, Auto">
-                            <SelectableTextBlock FontWeight="Bold" Text="{Binding Title}"
-                                                 TextTrimming="CharacterEllipsis" />
-                            <SelectableTextBlock Grid.Row="1" Text="{Binding Creator}"
-                                                 Classes="Tertiary" TextTrimming="CharacterEllipsis" />
-                            
-                        </Grid>
-                        
-                        <Grid Grid.Column="2" HorizontalAlignment="{OnFormFactor Default='Center', Mobile='Right'}" RowDefinitions="Auto" VerticalAlignment="Center">
-                            <Border Tag="{Binding StatusId}" Classes="StatusPill" CornerRadius="999"
-                                    VerticalAlignment="Center" HorizontalAlignment="Center"
+                        <Grid ColumnDefinitions="36,*,Auto,Auto" Height="36"
+                              ColumnSpacing="8" IsVisible="{OnFormFactor Default='False', Mobile='True'}">
+                            <Grid Grid.Column="0">
+                                <Border CornerRadius="10" ClipToBounds="True" IsVisible="{Binding HasPoster}">
+                                    <controls:PosterImage PosterPath="{Binding PosterPath}" Stretch="UniformToFill" />
+                                </Border>
+                                <Border Background="{Binding PosterPlaceholderBrush}" CornerRadius="10"
+                                        IsVisible="{Binding !HasPoster}" />
+                                <Path Data="{Binding PosterPlaceholderIcon}"
+                                      Width="10" Height="10" Stretch="Uniform"
+                                      Stroke="#EFFFFFFF" StrokeThickness="1.5"
+                                      StrokeLineCap="Round" StrokeJoin="Round"
+                                      HorizontalAlignment="Center" VerticalAlignment="Center" Opacity="0.9"
+                                      IsVisible="{Binding !HasPoster}" />
+                            </Grid>
+                            <Grid Grid.Column="1" RowDefinitions="Auto,Auto">
+                                <SelectableTextBlock FontWeight="Bold" Text="{Binding Title}"
+                                                     TextTrimming="CharacterEllipsis" />
+                                <SelectableTextBlock Grid.Row="1" Text="{Binding Creator}"
+                                                     Classes="Tertiary" TextTrimming="CharacterEllipsis" />
+                            </Grid>
+                            <Border Grid.Column="2" Tag="{Binding StatusId}" Classes="StatusPill"
+                                    CornerRadius="999" VerticalAlignment="Center" HorizontalAlignment="Center"
                                     Padding="9,4">
                                 <TextBlock Text="{Binding Status.Name}" FontSize="11" FontWeight="Bold" />
                             </Border>
-                        </Grid>
-                        
-                        <Grid Grid.Column="3" ColumnDefinitions="Auto,Auto" VerticalAlignment="Center"
-                              ColumnSpacing="8">
-                            <Button Grid.Column="0" Height="24" Width="24"
-                                    VerticalAlignment="Top" HorizontalAlignment="Right"
-                                    MinHeight="0" MinWidth="0" CornerRadius="12" Padding="0"
-                                    Background="{DynamicResource HeartBackground}"
-                                    ToolTip.Tip="Изменить"
-                                    x:CompileBindings="False"
-                                    Command="{Binding $parent[ItemsControl].DataContext.EditMediaCommand}"
-                                    CommandParameter="{Binding}">
-                                <avalonia:MaterialIcon Kind="Pencil"
-                                                       Foreground="{DynamicResource MyButtonForeground}"
-                                                       Width="13" />
-                            </Button>
-                            <Button Grid.Column="1" Height="24" Width="24"
-                                    VerticalAlignment="Top" HorizontalAlignment="Right"
-                                    MinHeight="0" MinWidth="0" CornerRadius="12" Padding="0"
-                                    Background="{DynamicResource HeartBackground}"
-                                    x:CompileBindings="False"
-                                    Command="{Binding $parent[ItemsControl].DataContext.ToggleFavoriteCommand}"
-                                    CommandParameter="{Binding}">
-                                <Grid>
-                                    <avalonia:MaterialIcon Kind="HeartOutline" Foreground="#9C948A" Width="13"
-                                                           IsVisible="{Binding !IsFavorite}" />
-                                    <avalonia:MaterialIcon Kind="Heart" Foreground="#b85c38" Width="13"
-                                                           IsVisible="{Binding IsFavorite}" />
-                                </Grid>
-                            </Button>
+                            <StackPanel Grid.Column="3" Orientation="Horizontal" VerticalAlignment="Center"
+                                        Spacing="8">
+                                <Button Height="24" Width="24" MinHeight="0" MinWidth="0"
+                                        CornerRadius="12" Padding="0"
+                                        Background="{DynamicResource HeartBackground}"
+                                        ToolTip.Tip="Изменить"
+                                        x:CompileBindings="False"
+                                        Command="{Binding $parent[ItemsControl].DataContext.EditMediaCommand}"
+                                        CommandParameter="{Binding}">
+                                    <avalonia:MaterialIcon Kind="Pencil"
+                                                           Foreground="{DynamicResource MyButtonForeground}"
+                                                           Width="13" />
+                                </Button>
+                                <Button Height="24" Width="24" MinHeight="0" MinWidth="0"
+                                        CornerRadius="12" Padding="0"
+                                        Background="{DynamicResource HeartBackground}"
+                                        x:CompileBindings="False"
+                                        Command="{Binding $parent[ItemsControl].DataContext.ToggleFavoriteCommand}"
+                                        CommandParameter="{Binding}">
+                                    <Grid>
+                                        <avalonia:MaterialIcon Kind="HeartOutline" Foreground="#9C948A" Width="13"
+                                                               IsVisible="{Binding !IsFavorite}" />
+                                        <avalonia:MaterialIcon Kind="Heart" Foreground="#b85c38" Width="13"
+                                                               IsVisible="{Binding IsFavorite}" />
+                                    </Grid>
+                                </Button>
+                            </StackPanel>
                         </Grid>
                     </Grid>
                 </Border>

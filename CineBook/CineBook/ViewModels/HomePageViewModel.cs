@@ -485,6 +485,10 @@ public partial class HomePageViewModel : ViewModelBase
             viewModel.DiscardPendingPosters();
             MainView.Current.ShowToast(exception.InnerException?.Message ?? exception.Message, NotificationType.Error);
         }
+        finally
+        {
+            viewModel.DisposeCoverSearch();
+        }
     }
 
     [RelayCommand]

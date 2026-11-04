@@ -9,41 +9,53 @@
              x:Class="CineBook.Views.MediaItemView"
              x:DataType="models:MediaItemViewModel">
     <Grid ColumnDefinitions="{OnFormFactor Default='2*, 3*', Mobile='*'}" ColumnSpacing="24">
-        <Border Grid.Column="0" Height="360" CornerRadius="16" ClipToBounds="True"
-                VerticalAlignment="{OnFormFactor Default='Top', Mobile='Stretch'}"
-                IsVisible="{OnFormFactor Default='True', Mobile='False'}">
-            <Grid>
-                <controls:PosterImage PosterPath="{Binding MediaItem.PosterPath}" Stretch="UniformToFill"
-                       IsVisible="{Binding MediaItem.HasPoster}" />
-                <Border Background="{Binding MediaItem.PosterPlaceholderBrush}"
-                        IsVisible="{Binding !MediaItem.HasPoster}" />
-                <Path Data="{Binding MediaItem.PosterPlaceholderIcon}"
-                      Width="64" Height="64" Stretch="Uniform"
-                      Stroke="#EFFFFFFF" StrokeThickness="4"
-                      StrokeLineCap="Round" StrokeJoin="Round"
-                      HorizontalAlignment="Center" VerticalAlignment="Center"
-                      IsVisible="{Binding !MediaItem.HasPoster}" />
-            </Grid>
-        </Border>
+        <Grid Grid.Column="0" IsVisible="{OnFormFactor Default='True', Mobile='False'}"
+              x:CompileBindings="False">
+            <Border MaxWidth="380" MaxHeight="560" CornerRadius="16" ClipToBounds="True"
+                    HorizontalAlignment="Center" VerticalAlignment="Top"
+                    IsVisible="{Binding MediaItem.HasPoster}">
+                <controls:PosterImage PosterPath="{Binding MediaItem.PosterPath}" Stretch="Uniform" />
+            </Border>
+            <controls:AspectRatioPanel AspectRatio="0.675676" MaxWidth="380" MaxHeight="560"
+                                       HorizontalAlignment="Center" VerticalAlignment="Top"
+                                       IsVisible="{Binding !MediaItem.HasPoster}">
+                <Border CornerRadius="16" ClipToBounds="True">
+                    <Grid>
+                        <Border Background="{Binding MediaItem.PosterPlaceholderBrush}" />
+                        <Path Data="{Binding MediaItem.PosterPlaceholderIcon}"
+                              Width="64" Height="64" Stretch="Uniform"
+                              Stroke="#EFFFFFFF" StrokeThickness="4"
+                              StrokeLineCap="Round" StrokeJoin="Round"
+                              HorizontalAlignment="Center" VerticalAlignment="Center" />
+                    </Grid>
+                </Border>
+            </controls:AspectRatioPanel>
+        </Grid>
 
         <ScrollViewer Grid.Column="{OnFormFactor Default='1', Mobile='0'}"
                       VerticalScrollBarVisibility="Auto">
             <StackPanel Spacing="20">
-                <Border Height="210" CornerRadius="16" ClipToBounds="True"
-                        IsVisible="{OnFormFactor Default='False', Mobile='True'}">
-                    <Grid>
-                        <controls:PosterImage PosterPath="{Binding MediaItem.PosterPath}" Stretch="UniformToFill"
-                               IsVisible="{Binding MediaItem.HasPoster}" />
-                        <Border Background="{Binding MediaItem.PosterPlaceholderBrush}"
-                                IsVisible="{Binding !MediaItem.HasPoster}" />
-                        <Path Data="{Binding MediaItem.PosterPlaceholderIcon}"
-                              Width="48" Height="48" Stretch="Uniform"
-                              Stroke="#EFFFFFFF" StrokeThickness="3"
-                              StrokeLineCap="Round" StrokeJoin="Round"
-                              HorizontalAlignment="Center" VerticalAlignment="Center"
-                              IsVisible="{Binding !MediaItem.HasPoster}" />
-                    </Grid>
-                </Border>
+                <Grid IsVisible="{OnFormFactor Default='False', Mobile='True'}"
+                      x:CompileBindings="False">
+                    <Border MaxWidth="480" MaxHeight="240" CornerRadius="16" ClipToBounds="True"
+                            HorizontalAlignment="Center" IsVisible="{Binding MediaItem.HasPoster}">
+                        <controls:PosterImage PosterPath="{Binding MediaItem.PosterPath}" Stretch="Uniform" />
+                    </Border>
+                    <controls:AspectRatioPanel AspectRatio="1.6" MaxWidth="480" MaxHeight="240"
+                                               HorizontalAlignment="Center"
+                                               IsVisible="{Binding !MediaItem.HasPoster}">
+                        <Border CornerRadius="16" ClipToBounds="True">
+                            <Grid>
+                                <Border Background="{Binding MediaItem.PosterPlaceholderBrush}" />
+                                <Path Data="{Binding MediaItem.PosterPlaceholderIcon}"
+                                      Width="48" Height="48" Stretch="Uniform"
+                                      Stroke="#EFFFFFFF" StrokeThickness="3"
+                                      StrokeLineCap="Round" StrokeJoin="Round"
+                                      HorizontalAlignment="Center" VerticalAlignment="Center" />
+                            </Grid>
+                        </Border>
+                    </controls:AspectRatioPanel>
+                </Grid>
 
                 <Border Background="{DynamicResource CardBackground}"
                         BorderBrush="{DynamicResource SemiColorBorder}" BorderThickness="1"
