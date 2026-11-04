@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.ComponentModel.DataAnnotations.Schema;
 using Avalonia;
@@ -38,19 +39,27 @@ public partial class MediaItem : ObservableObject
 
     public int TypeId { get; set; }
 
-    public string Title { get; set; } = null!;
+    [ObservableProperty]
+    public partial string Title { get; set; } = null!;
 
-    public string? Creator { get; set; }
+    [ObservableProperty]
+    public partial string? Creator { get; set; }
 
-    public int? Duration { get; set; }
+    [ObservableProperty]
+    public partial int? Duration { get; set; }
 
-    public double? Rating { get; set; }
+    [ObservableProperty]
+    public partial double? Rating { get; set; }
 
-    public string? Description { get; set; }
+    [ObservableProperty]
+    public partial string? Description { get; set; }
 
     public int StatusId { get; set; }
 
-    public string? PosterPath { get; set; }
+    [ObservableProperty]
+    public partial string? PosterPath { get; set; }
+
+    [NotMapped] public bool HasPoster => !string.IsNullOrWhiteSpace(PosterPath) && File.Exists(PosterPath);
     
     public string AdditionDateTime { get; set; }
 

@@ -10,4 +10,9 @@ public partial class Status
     public string Name { get; set; } = null!;
 
     public virtual ICollection<MediaItem> MediaItems { get; set; } = new List<MediaItem>();
+
+    public override string ToString()
+    {
+        return Name;
+    }
 }

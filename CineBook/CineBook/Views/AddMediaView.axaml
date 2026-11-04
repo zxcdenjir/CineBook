@@ -1,0 +1,133 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:u="https://irihi.tech/ursa"
+             xmlns:avalonia="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
+             xmlns:models="clr-namespace:CineBook.Models"
+             xmlns:recolor="https://irihi.tech/semi.recolor"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="CineBook.Views.AddMediaView"
+             x:DataType="models:AddMediaViewModel">
+    <ScrollViewer VerticalScrollBarVisibility="Hidden">
+        <u:Form HorizontalAlignment="Stretch">
+            <u:SelectionList
+                u:FormItem.Label="Тип"
+                HorizontalAlignment="Stretch" SelectedIndex="{Binding SelectedMediaTypeId}"
+                Background="{DynamicResource SemiColorBorder}" CornerRadius="12">
+                <u:SelectionList.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <UniformGrid HorizontalAlignment="Stretch" Columns="3" />
+                    </ItemsPanelTemplate>
+                </u:SelectionList.ItemsPanel>
+
+                <u:SelectionList.Indicator>
+                    <Border
+                        Margin="2"
+                        HorizontalAlignment="Stretch"
+                        VerticalAlignment="Stretch"
+                        Background="{DynamicResource ButtonOutlineBackground}"
+                        Theme="{DynamicResource CardBorder}"
+                        Padding="16"
+                        CornerRadius="10" />
+                </u:SelectionList.Indicator>
+
+                <u:SelectionListItem
+                    HorizontalContentAlignment="Center"
+                    VerticalContentAlignment="Center"
+                    Foreground="{DynamicResource MyButtonForeground}">
+                    Фильм
+                </u:SelectionListItem>
+
+                <u:SelectionListItem
+                    HorizontalContentAlignment="Center"
+                    VerticalContentAlignment="Center"
+                    Foreground="{DynamicResource MyButtonForeground}">
+                    Сериал
+                </u:SelectionListItem>
+
+                <u:SelectionListItem
+                    HorizontalContentAlignment="Center"
+                    VerticalContentAlignment="Center"
+                    Foreground="{DynamicResource MyButtonForeground}">
+                    Книга
+                </u:SelectionListItem>
+            </u:SelectionList>
+
+            <TextBox Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}"
+                     u:FormItem.Label="Название" />
+
+            <TextBox Text="{Binding Creator, UpdateSourceTrigger=PropertyChanged}"
+                     u:FormItem.Label="{Binding CreatorLabel}" />
+
+            <TextBox Text="{Binding Description, UpdateSourceTrigger=PropertyChanged}"
+                     u:FormItem.Label="Описание" Classes="TextArea ClearButton" Padding="12"/>
+
+            <ItemsControl ItemsSource="{Binding AllGenres}" u:FormItem.Label="Жанры">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <WrapPanel Orientation="Horizontal" ItemSpacing="8" LineSpacing="8" />
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <ToggleButton
+                            CornerRadius="22"
+                            BorderThickness="1"
+                            Padding="12"
+                            FontWeight="Medium"
+                            Content="{Binding Name}"
+                            IsChecked="{Binding IsSelected, Mode=TwoWay}" />
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+
+            <Grid RowDefinitions="Auto,Auto" RowSpacing="12" ColumnDefinitions="*,*" ColumnSpacing="12">
+                <u:Form Grid.Column="0" Grid.Row="0" HorizontalAlignment="Stretch">
+                    <u:NumericIntUpDown u:FormItem.Label="Длительность" Minimum="0"
+                                        Value="{Binding Duration, UpdateSourceTrigger=PropertyChanged}"
+                                        ShowButtonSpinner="False"
+                                        PlaceholderText="Минуты / Серии / Страницы" />
+                </u:Form>
+                <u:Form Grid.Column="1" Grid.Row="0" HorizontalAlignment="Stretch">
+                    <u:NumericDecimalUpDown
+                        u:FormItem.Label="Рейтинг"
+                        Minimum="0" Maximum="10"
+                        Step="0.1"
+                        Value="{Binding Rating, UpdateSourceTrigger=PropertyChanged}"
+                        ShowButtonSpinner="True"
+                        PlaceholderText="От 0 до 10" />
+                </u:Form>
+                <u:Form Grid.Column="0" Grid.Row="1" HorizontalAlignment="Stretch">
+                    <ComboBox ItemsSource="{Binding AllStatuses}"
+                              SelectedItem="{Binding SelectedStatus, Mode=TwoWay}"
+                              HorizontalAlignment="Stretch"
+                              u:FormItem.Label="Статус" />
+                </u:Form>
+                <u:Form Grid.Column="1" Grid.Row="1" HorizontalAlignment="Stretch" VerticalAlignment="Center">
+                    <CheckBox
+                        Content="В избранное"
+                        IsChecked="{Binding IsFavorite}" VerticalAlignment="Center"
+                        u:FormItem.Label="" />
+                </u:Form>
+            </Grid>
+            <recolor:ImagePicker u:FormItem.Label="Постер"
+                                 Image="{Binding SelectedImage, Mode=TwoWay}"
+                                 ImagePath="{Binding PosterPath, Mode=TwoWay}"
+                                 CornerRadius="12" Stretch="UniformToFill" />
+
+            <Button IsVisible="{Binding IsEditing}"
+                    Command="{Binding DeleteCommand}"
+                    HorizontalAlignment="Stretch"
+                    Margin="0,8,0,0"
+                    Foreground="{DynamicResource DeleteActionForeground}"
+                    BorderBrush="{DynamicResource DeleteActionForeground}">
+                <StackPanel Orientation="Horizontal" Spacing="8">
+                    <avalonia:MaterialIcon Kind="DeleteOutline" />
+                    <TextBlock Text="Удалить медиа" />
+                </StackPanel>
+            </Button>
+        </u:Form>
+    </ScrollViewer>
+</UserControl>

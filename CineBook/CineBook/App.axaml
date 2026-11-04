@@ -29,6 +29,7 @@
                     <SolidColorBrush x:Key="SemiColorSecondaryLightActive" Color="#E2B8A7" />
 
                     <SolidColorBrush x:Key="MyButtonForeground" Color="#5C564C" />
+                    <SolidColorBrush x:Key="DeleteActionForeground" Color="#A64F30" />
                     <SolidColorBrush x:Key="SemiColorBorder" Color="#E7DFD3" />
                     <SolidColorBrush x:Key="ButtonOutlineBorderBrush" Color="#E7DFD3" />
                     <SolidColorBrush x:Key="ButtonGroupSeparatorForeground" Color="#E7DFD3" />
@@ -93,6 +94,7 @@
                     <SolidColorBrush x:Key="SemiColorSecondaryLightActive" Color="#54372B" />
 
                     <SolidColorBrush x:Key="MyButtonForeground" Color="#C9BCAB" />
+                    <SolidColorBrush x:Key="DeleteActionForeground" Color="#D88B70" />
                     <SolidColorBrush x:Key="SemiColorBorder" Color="#463D33" />
                     <SolidColorBrush x:Key="ButtonOutlineBorderBrush" Color="#463D33" />
                     <SolidColorBrush x:Key="ButtonGroupSeparatorForeground" Color="#463D33" />
@@ -193,6 +195,35 @@
 
         <Style Selector="TextBox:focus /template/ Border#PART_ContentPresenterBorder">
             <Setter Property="BorderBrush" Value="{DynamicResource TextBoxFocusBorderBrush}" />
+        </Style>
+
+        <Style Selector="ComboBox">
+            <Setter Property="CornerRadius" Value="12" />
+            <Setter Property="Padding" Value="12" />
+            <Setter Property="Background" Value="{DynamicResource TextBoxDefaultBackground}" />
+            <Setter Property="BorderBrush" Value="{DynamicResource SemiColorBorder}" />
+            <Setter Property="Foreground" Value="{DynamicResource MyButtonForeground}" />
+        </Style>
+
+        <Style Selector="ComboBox:pointerover">
+            <Setter Property="Background" Value="{DynamicResource TextBoxPointeroverBackground}" />
+        </Style>
+
+        <Style Selector="ComboBox:focus">
+            <Setter Property="BorderBrush" Value="{DynamicResource TextBoxFocusBorderBrush}" />
+        </Style>
+
+        <Style Selector="ComboBoxItem">
+            <Setter Property="Foreground" Value="{DynamicResource MyButtonForeground}" />
+        </Style>
+
+        <Style Selector="ComboBoxItem:pointerover">
+            <Setter Property="Background" Value="{DynamicResource ButtonOutlinePointeroverBackground}" />
+        </Style>
+
+        <Style Selector="ComboBoxItem:selected">
+            <Setter Property="Background" Value="{DynamicResource ToggleButtonCheckedBackground}" />
+            <Setter Property="Foreground" Value="{DynamicResource ToggleButtonCheckedForeground}" />
         </Style>
 
         <Style Selector="Button">
@@ -395,14 +426,35 @@
             <Setter Property="ItemsPanel">
                 <Setter.Value>
                     <ItemsPanelTemplate>
-                        <StackPanel Spacing="12"/>
+                        <StackPanel Spacing="12" />
                     </ItemsPanelTemplate>
                 </Setter.Value>
             </Setter>
         </Style>
 
         <Style Selector="u|FormItem">
-            <Setter Property="Margin" Value="0 0 0 0"/>
+            <Setter Property="Margin" Value="0 0 0 0" />
+        </Style>
+
+        <Style Selector="u|NumericUpDown">
+            <Setter Property="CornerRadius" Value="12" />
+            <Setter Property="Padding" Value="12" />
+        </Style>
+
+        <Style Selector="u|StandardDialogControl.AddMedia">
+            <Setter Property="Width" Value="1023"/>
+            <Setter Property="Height" Value="618"/>
+            <Setter Property="MaxWidth" Value="1023"/>
+            <Setter Property="MaxHeight" Value="618"/>
+            <Style Selector="^ /template/ Border#PART_Border">
+                <Setter Property="Background" Value="{DynamicResource PageBg}" />
+            </Style>
+        </Style>
+        
+        <Style Selector="u|StandardDrawerControl.AddMedia">
+            <Style Selector="^ /template/ Border#PART_Root">
+                <Setter Property="Background" Value="{DynamicResource PageBg}" />
+            </Style>
         </Style>
     </Application.Styles>
 </Application>
