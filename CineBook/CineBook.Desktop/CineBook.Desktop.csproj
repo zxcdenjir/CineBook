@@ -2,6 +2,7 @@
   <PropertyGroup>
     <RootNamespace>CineBook</RootNamespace>
     <AssemblyName>CineBook</AssemblyName>
+    <PackageId>CineBook.Desktop</PackageId>
     <OutputType>WinExe</OutputType>
     <!--If you are willing to use platform-specific APIs, use conditional compilation.
     See https://docs.avaloniaui.net/docs/guides/platforms/platform-specific-code/dotnet for more details.-->
