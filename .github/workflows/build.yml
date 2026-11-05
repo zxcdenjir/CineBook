@@ -151,7 +151,7 @@ jobs:
         run: |
           set -euo pipefail
           sudo apt-get update
-          sudo apt-get install -y rpm ruby ruby-dev
+          sudo apt-get install -y desktop-file-utils rpm ruby ruby-dev
           sudo gem install --no-document fpm
           mkdir -p artifacts/linux package-root/opt/cinebook package-root/usr/bin package-root/usr/share/applications package-root/usr/share/icons/hicolor/512x512/apps
           cp -a artifacts/publish/linux-x64/. package-root/opt/cinebook/
