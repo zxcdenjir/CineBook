@@ -10,7 +10,7 @@ permissions:
 
 jobs:
   desktop:
-    name: Desktop
+    name: Windows x64
     runs-on: windows-2025
     steps:
       - uses: actions/checkout@v6
@@ -24,12 +24,12 @@ jobs:
           Compress-Archive -Path artifacts/publish/win-x64/* -DestinationPath artifacts/CineBook-win-x64.zip -Force
       - uses: actions/upload-artifact@v7
         with:
-          name: CineBook-windows-win-x64
           path: artifacts/CineBook-win-x64.zip
+          archive: false
           if-no-files-found: error
 
   android:
-    name: Android
+    name: Android APKs
     runs-on: windows-2025
     steps:
       - uses: actions/checkout@v6
@@ -57,8 +57,18 @@ jobs:
           }
       - uses: actions/upload-artifact@v7
         with:
-          name: CineBook-android-apks
-          path: artifacts/android/*.apk
+          path: artifacts/android/CineBook-android-arm64.apk
+          archive: false
+          if-no-files-found: error
+      - uses: actions/upload-artifact@v7
+        with:
+          path: artifacts/android/CineBook-android-armv7.apk
+          archive: false
+          if-no-files-found: error
+      - uses: actions/upload-artifact@v7
+        with:
+          path: artifacts/android/CineBook-android-x86.apk
+          archive: false
           if-no-files-found: error
 
   ios:
@@ -79,6 +89,131 @@ jobs:
           cp "$ipa" "$GITHUB_WORKSPACE/artifacts/CineBook-ios-arm64-ios13-plus.ipa"
       - uses: actions/upload-artifact@v7
         with:
-          name: CineBook-ios-arm64-ios13-plus
           path: artifacts/CineBook-ios-arm64-ios13-plus.ipa
+          archive: false
+          if-no-files-found: error
+
+  macos:
+    name: macOS arm64 and x64
+    runs-on: macos-26
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-dotnet@v6
+        with:
+          dotnet-version: 10.0.x
+      - name: Publish macOS disk images
+        run: |
+          set -euo pipefail
+          mkdir -p artifacts/macos
+          for rid in osx-arm64 osx-x64; do
+            output="artifacts/publish/$rid"
+            app="artifacts/macos/CineBook-$rid.app"
+            dotnet publish CineBook/CineBook.Desktop/CineBook.Desktop.csproj --configuration Release --runtime "$rid" --self-contained true --output "$output"
+            mkdir -p "$app/Contents/MacOS"
+            cp -R "$output/." "$app/Contents/MacOS/"
+            cat > "$app/Contents/Info.plist" <<'PLIST'
+          <?xml version="1.0" encoding="UTF-8"?>
+          <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+          <plist version="1.0"><dict>
+            <key>CFBundleExecutable</key><string>CineBook.Desktop</string>
+            <key>CFBundleIdentifier</key><string>com.cinebook.desktop</string>
+            <key>CFBundleName</key><string>CineBook</string>
+            <key>CFBundlePackageType</key><string>APPL</string>
+            <key>CFBundleShortVersionString</key><string>1.0.0</string>
+            <key>CFBundleVersion</key><string>1</string>
+          </dict></plist>
+          PLIST
+            hdiutil create -volname "CineBook $rid" -srcfolder "$app" -ov -format UDZO "artifacts/CineBook-macos-$rid.dmg"
+          done
+      - uses: actions/upload-artifact@v7
+        with:
+          path: artifacts/CineBook-macos-osx-arm64.dmg
+          archive: false
+          if-no-files-found: error
+      - uses: actions/upload-artifact@v7
+        with:
+          path: artifacts/CineBook-macos-osx-x64.dmg
+          archive: false
+          if-no-files-found: error
+
+  linux:
+    name: Linux x64 packages
+    runs-on: ubuntu-22.04
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-dotnet@v6
+        with:
+          dotnet-version: 10.0.x
+      - name: Publish self-contained Linux build
+        run: dotnet publish CineBook/CineBook.Desktop/CineBook.Desktop.csproj --configuration Release --runtime linux-x64 --self-contained true --output artifacts/publish/linux-x64
+      - name: Build Debian, RPM, portable, and AppImage packages
+        shell: bash
+        run: |
+          set -euo pipefail
+          sudo apt-get update
+          sudo apt-get install -y rpm ruby ruby-dev
+          sudo gem install --no-document fpm
+          mkdir -p artifacts/linux package-root/opt/cinebook package-root/usr/bin package-root/usr/share/applications package-root/usr/share/icons/hicolor/512x512/apps
+          cp -a artifacts/publish/linux-x64/. package-root/opt/cinebook/
+          cp CineBook/CineBook/Assets/Icon.png package-root/usr/share/icons/hicolor/512x512/apps/cinebook.png
+          cat > package-root/usr/bin/cinebook <<'LAUNCHER'
+          #!/bin/sh
+          exec /opt/cinebook/CineBook.Desktop "$@"
+          LAUNCHER
+          chmod +x package-root/usr/bin/cinebook
+          cat > package-root/usr/share/applications/cinebook.desktop <<'DESKTOP'
+          [Desktop Entry]
+          Name=CineBook
+          Exec=cinebook
+          Icon=cinebook
+          Type=Application
+          Categories=AudioVideo;Video;
+          DESKTOP
+          fpm -s dir -t deb -n cinebook -v 1.0.0 --architecture amd64 --description 'CineBook local media library' --maintainer 'CineBook contributors' --depends libice6 --depends libsm6 --depends libfontconfig1 --depends libfreetype6 --depends libx11-6 --package "$GITHUB_WORKSPACE/artifacts/linux/CineBook-linux-x64.deb" -C "$GITHUB_WORKSPACE/package-root" .
+          fpm -s dir -t rpm -n cinebook -v 1.0.0 --architecture x86_64 --description 'CineBook local media library' --maintainer 'CineBook contributors' --depends libICE --depends libSM --depends fontconfig --depends freetype --depends libX11 --package "$GITHUB_WORKSPACE/artifacts/linux/CineBook-linux-x64.rpm" -C "$GITHUB_WORKSPACE/package-root" .
+          tar -czf artifacts/linux/CineBook-linux-x64.tar.gz -C artifacts/publish/linux-x64 .
+
+          appdir=artifacts/appimage/CineBook.AppDir
+          mkdir -p "$appdir/usr/bin" "$appdir/usr/share/applications" "$appdir/usr/share/icons/hicolor/512x512/apps"
+          cp -a artifacts/publish/linux-x64/. "$appdir/usr/bin/"
+          cp CineBook/CineBook/Assets/Icon.png "$appdir/cinebook.png"
+          cp CineBook/CineBook/Assets/Icon.png "$appdir/usr/share/icons/hicolor/512x512/apps/cinebook.png"
+          cat > "$appdir/AppRun" <<'APPRUN'
+          #!/bin/sh
+          HERE="$(dirname "$(readlink -f "$0")")"
+          exec "$HERE/usr/bin/CineBook.Desktop" "$@"
+          APPRUN
+          chmod +x "$appdir/AppRun"
+          cat > "$appdir/cinebook.desktop" <<'DESKTOP'
+          [Desktop Entry]
+          Name=CineBook
+          Exec=AppRun
+          Icon=cinebook
+          Type=Application
+          Categories=AudioVideo;Video;
+          DESKTOP
+          cp "$appdir/cinebook.desktop" "$appdir/usr/share/applications/cinebook.desktop"
+          mkdir -p artifacts/tools
+          curl -fsSL https://github.com/AppImage/appimagetool/releases/download/1.9.0/appimagetool-x86_64.AppImage -o artifacts/tools/appimagetool.AppImage
+          chmod +x artifacts/tools/appimagetool.AppImage
+          ARCH=x86_64 APPIMAGE_EXTRACT_AND_RUN=1 artifacts/tools/appimagetool.AppImage "$appdir" artifacts/linux/CineBook-linux-x64.AppImage
+      - uses: actions/upload-artifact@v7
+        with:
+          path: artifacts/linux/CineBook-linux-x64.deb
+          archive: false
+          if-no-files-found: error
+      - uses: actions/upload-artifact@v7
+        with:
+          path: artifacts/linux/CineBook-linux-x64.rpm
+          archive: false
+          if-no-files-found: error
+      - uses: actions/upload-artifact@v7
+        with:
+          path: artifacts/linux/CineBook-linux-x64.AppImage
+          archive: false
+          if-no-files-found: error
+      - uses: actions/upload-artifact@v7
+        with:
+          path: artifacts/linux/CineBook-linux-x64.tar.gz
+          archive: false
           if-no-files-found: error
