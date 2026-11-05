@@ -23,6 +23,7 @@ jobs:
         run: |
           dotnet publish CineBook/CineBook.Desktop/CineBook.Desktop.csproj --configuration Release --runtime win-x64 --self-contained true --output artifacts/publish/win-x64
           if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+          Rename-Item artifacts/publish/win-x64/CineBook.Desktop.exe CineBook.exe
           Compress-Archive -Path artifacts/publish/win-x64/* -DestinationPath artifacts/CineBook-win-x64.zip -Force
       - uses: actions/upload-artifact@v7
         with:
@@ -113,6 +114,7 @@ jobs:
             dotnet publish CineBook/CineBook.Desktop/CineBook.Desktop.csproj --configuration Release --runtime "$rid" --self-contained true --output "$output"
             mkdir -p "$app/Contents/MacOS"
             cp -R "$output/." "$app/Contents/MacOS/"
+            mv "$app/Contents/MacOS/CineBook.Desktop" "$app/Contents/MacOS/CineBook"
             cat > "$app/Contents/Info.plist" <<'PLIST'
           <?xml version="1.0" encoding="UTF-8"?>
           <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
@@ -157,6 +159,7 @@ jobs:
           sudo gem install --no-document fpm
           mkdir -p artifacts/linux package-root/opt/cinebook package-root/usr/bin package-root/usr/share/applications package-root/usr/share/icons/hicolor/512x512/apps
           cp -a artifacts/publish/linux-x64/. package-root/opt/cinebook/
+          mv package-root/opt/cinebook/CineBook.Desktop package-root/opt/cinebook/CineBook
           cp CineBook/CineBook/Assets/Icon.png package-root/usr/share/icons/hicolor/512x512/apps/cinebook.png
           cat > package-root/usr/bin/cinebook <<'LAUNCHER'
           #!/bin/sh
@@ -178,6 +181,7 @@ jobs:
           appdir=artifacts/appimage/CineBook.AppDir
           mkdir -p "$appdir/usr/bin" "$appdir/usr/share/applications" "$appdir/usr/share/icons/hicolor/512x512/apps"
           cp -a artifacts/publish/linux-x64/. "$appdir/usr/bin/"
+          mv "$appdir/usr/bin/CineBook.Desktop" "$appdir/usr/bin/CineBook"
           cp CineBook/CineBook/Assets/Icon.png "$appdir/cinebook.png"
           cp CineBook/CineBook/Assets/Icon.png "$appdir/usr/share/icons/hicolor/512x512/apps/cinebook.png"
           cat > "$appdir/AppRun" <<'APPRUN'
