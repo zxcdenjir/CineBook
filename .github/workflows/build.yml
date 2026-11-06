@@ -90,7 +90,7 @@ jobs:
           ipa=$(find "$GITHUB_WORKSPACE/artifacts" -type f -name 'CineBook-ios-arm64.ipa' -print -quit)
           test -n "$ipa"
           cp "$ipa" "$GITHUB_WORKSPACE/artifacts/CineBook-ios-arm64-ios13-plus.ipa"
-          dsym=$(find "$GITHUB_WORKSPACE/artifacts/ios" -type d -name '*.dSYM' -print -quit)
+          dsym=$(find "$GITHUB_WORKSPACE/artifacts" -type d -name '*.dSYM' -print -quit)
           test -n "$dsym"
           ditto -c -k --sequesterRsrc --keepParent "$dsym" "$GITHUB_WORKSPACE/artifacts/CineBook-ios-arm64-dsym.zip"
       - uses: actions/upload-artifact@v7
