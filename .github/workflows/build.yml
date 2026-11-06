@@ -90,8 +90,22 @@ jobs:
           ipa=$(find "$GITHUB_WORKSPACE/artifacts" -type f -name 'CineBook-ios-arm64.ipa' -print -quit)
           test -n "$ipa"
           cp "$ipa" "$GITHUB_WORKSPACE/artifacts/CineBook-ios-arm64-ios13-plus.ipa"
-          dsym=$(find "$GITHUB_WORKSPACE" -type d -name '*.dSYM' -print -quit)
-          if [ -z "$dsym" ]; then echo "::error::No .dSYM was generated anywhere in the workspace"; exit 1; fi
+          ipa_contents=$(mktemp -d)
+          trap 'rm -rf "$ipa_contents"' EXIT
+          unzip -q "$ipa" -d "$ipa_contents"
+          app_bundle=$(find "$ipa_contents/Payload" -mindepth 1 -maxdepth 1 -type d -name '*.app' -print -quit)
+          if [ -z "$app_bundle" ]; then echo "::error::No app bundle found inside the IPA"; exit 1; fi
+          executable=$(/usr/libexec/PlistBuddy -c 'Print :CFBundleExecutable' "$app_bundle/Info.plist")
+          dsym_binary=$(find "$GITHUB_WORKSPACE" -type f -path "*/Contents/Resources/DWARF/$executable" -print -quit)
+          if [ -z "$dsym_binary" ]; then
+            echo "::error::No app dSYM found for $executable"
+            find "$GITHUB_WORKSPACE" -type d -name '*.dSYM' -print
+            exit 1
+          fi
+          app_uuid=$(xcrun dwarfdump --uuid "$app_bundle/$executable" | awk '{print $2}')
+          dsym_uuid=$(xcrun dwarfdump --uuid "$dsym_binary" | awk '{print $2}')
+          if [ "$app_uuid" != "$dsym_uuid" ]; then echo "::error::App and dSYM UUIDs do not match"; exit 1; fi
+          dsym=${dsym_binary%/Contents/Resources/DWARF/*}
           ditto -c -k --sequesterRsrc --keepParent "$dsym" "$GITHUB_WORKSPACE/artifacts/CineBook-ios-arm64-dsym.zip"
       - uses: actions/upload-artifact@v7
         with:
