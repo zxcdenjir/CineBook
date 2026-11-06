@@ -86,13 +86,21 @@ jobs:
         run: dotnet workload install ios --version 10.0.401
       - name: Publish unsigned iOS IPA
         run: |
-          dotnet publish CineBook/CineBook.iOS/CineBook.iOS.csproj --configuration Release --framework net10.0-ios26.5 --runtime ios-arm64 --output artifacts/ios -p:BuildIpa=true -p:EnableCodeSigning=false -p:IpaPackageDir="$GITHUB_WORKSPACE/artifacts" -p:IpaPackageName=CineBook-ios-arm64
+          dotnet publish CineBook/CineBook.iOS/CineBook.iOS.csproj --configuration Release --framework net10.0-ios26.5 --runtime ios-arm64 --output artifacts/ios -p:BuildIpa=true -p:EnableCodeSigning=false -p:CopyDSYMToPublishDirectory=true -p:IpaPackageDir="$GITHUB_WORKSPACE/artifacts" -p:IpaPackageName=CineBook-ios-arm64
           ipa=$(find "$GITHUB_WORKSPACE/artifacts" -type f -name 'CineBook-ios-arm64.ipa' -print -quit)
           test -n "$ipa"
           cp "$ipa" "$GITHUB_WORKSPACE/artifacts/CineBook-ios-arm64-ios13-plus.ipa"
+          dsym=$(find "$GITHUB_WORKSPACE/artifacts/ios" -type d -name '*.dSYM' -print -quit)
+          test -n "$dsym"
+          ditto -c -k --sequesterRsrc --keepParent "$dsym" "$GITHUB_WORKSPACE/artifacts/CineBook-ios-arm64-dsym.zip"
       - uses: actions/upload-artifact@v7
         with:
           path: artifacts/CineBook-ios-arm64-ios13-plus.ipa
+          archive: false
+          if-no-files-found: error
+      - uses: actions/upload-artifact@v7
+        with:
+          path: artifacts/CineBook-ios-arm64-dsym.zip
           archive: false
           if-no-files-found: error
 
