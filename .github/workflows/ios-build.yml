@@ -49,7 +49,44 @@ jobs:
             -p:RuntimeIdentifier=ios-arm64 \
             -p:SupportedOSPlatformVersion=${{ env.SUPPORTED_IOS_VERSION }} \
             -p:EnableCodeSigning=false \
+            -p:CopyDSYMToPublishDirectory=true \
             -o ./publish
+
+      - name: Verify and package matching dSYM
+        run: |
+          set -euo pipefail
+          DSYM="$(find ./publish -maxdepth 1 -type d -name '*.app.dSYM' -print -quit)"
+          if [ -z "$DSYM" ]; then
+            echo "No app dSYM was produced in ./publish"
+            find ./publish -maxdepth 2 -print
+            exit 1
+          fi
+
+          mkdir -p ./ipa-check
+          IPA="$(find ./publish -maxdepth 1 -type f -name '*.ipa' -print -quit)"
+          unzip -q "$IPA" -d ./ipa-check
+          APP_INFO="$(find ./ipa-check/Payload -maxdepth 2 -name Info.plist -print -quit)"
+          APP_EXECUTABLE="$(/usr/libexec/PlistBuddy -c 'Print :CFBundleExecutable' "$APP_INFO")"
+          APP_BINARY="$(dirname "$APP_INFO")/$APP_EXECUTABLE"
+          DSYM_BINARY="$DSYM/Contents/Resources/DWARF/$APP_EXECUTABLE"
+
+          APP_UUID="$(dwarfdump --uuid "$APP_BINARY" | awk '/\(arm64\)/ { print $2; exit }')"
+          DSYM_UUID="$(dwarfdump --uuid "$DSYM_BINARY" | awk '/\(arm64\)/ { print $2; exit }')"
+          if [ -z "$APP_UUID" ] || [ "$APP_UUID" != "$DSYM_UUID" ]; then
+            echo "IPA UUID ($APP_UUID) does not match dSYM UUID ($DSYM_UUID)"
+            exit 1
+          fi
+          echo "Verified matching arm64 UUID: $APP_UUID"
+
+          ditto -c -k --sequesterRsrc --keepParent "$DSYM" ./publish/CineBook-ios-arm64-dsym.zip
+
+      - name: Upload app dSYM for crash symbolication
+        uses: actions/upload-artifact@v7
+        with:
+          name: ios-app-dsym
+          path: ./publish/CineBook-ios-arm64-dsym.zip
+          archive: false
+          if-no-files-found: error
 
       - name: Upload unsigned IPA
         uses: actions/upload-artifact@v7
