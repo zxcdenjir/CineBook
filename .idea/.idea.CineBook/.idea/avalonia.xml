@@ -4,10 +4,12 @@
     <option name="projectPerEditor">
       <map>
         <entry key="CineBook/CineBook/App.axaml" value="CineBook/CineBook.Desktop/CineBook.Desktop.csproj" />
+        <entry key="CineBook/CineBook/Views/AddMediaView.axaml" value="CineBook/CineBook.Desktop/CineBook.Desktop.csproj" />
         <entry key="CineBook/CineBook/Views/FiltersView.axaml" value="CineBook/CineBook.Desktop/CineBook.Desktop.csproj" />
         <entry key="CineBook/CineBook/Views/HomePage.axaml" value="CineBook/CineBook.Desktop/CineBook.Desktop.csproj" />
         <entry key="CineBook/CineBook/Views/MainView.axaml" value="CineBook/CineBook.Desktop/CineBook.Desktop.csproj" />
         <entry key="CineBook/CineBook/Views/MainWindow.axaml" value="CineBook/CineBook.Desktop/CineBook.Desktop.csproj" />
+        <entry key="CineBook/CineBook/Views/MediaItemView.axaml" value="CineBook/CineBook.Desktop/CineBook.Desktop.csproj" />
       </map>
     </option>
   </component>

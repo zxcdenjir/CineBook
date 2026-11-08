@@ -10,6 +10,7 @@ using CineBook.Context;
 using CineBook.Models;
 using Microsoft.EntityFrameworkCore;
 using Avalonia.Controls;
+using Avalonia.Media;
 
 namespace CineBook;
 
@@ -28,45 +29,109 @@ public partial class App : Application
 
     public override void OnFrameworkInitializationCompleted()
     {
+        Exception? startupException = null;
         if (!Design.IsDesignMode)
         {
-            CineBookContext.InitializeDatabaseFromBundledTemplate();
-            using var context = new CineBookContext();
-            context.Database.EnsureCreated();
-
-            var savedTheme = context.AppSettings.Find(ThemeSettingKey)?.Value;
-            RequestedThemeVariant = savedTheme switch
+            try
             {
-                "Light" => ThemeVariant.Light,
-                "Dark" => ThemeVariant.Dark,
-                _ => ThemeVariant.Default
-            };
-            _themePersistenceReady = true;
+                CineBookContext.InitializeDatabaseFromBundledTemplate();
+                using var context = new CineBookContext();
+                context.Database.EnsureCreated();
+
+                var savedTheme = context.AppSettings.Find(ThemeSettingKey)?.Value;
+                RequestedThemeVariant = savedTheme switch
+                {
+                    "Light" => ThemeVariant.Light,
+                    "Dark" => ThemeVariant.Dark,
+                    _ => ThemeVariant.Default
+                };
+                _themePersistenceReady = true;
+            }
+            catch (Exception exception)
+            {
+                startupException = exception;
+            }
         }
 
         if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
         {
-            desktop.MainWindow = new MainWindow
+            var mainWindow = new MainWindow
             {
                 DataContext = new MainViewModel()
             };
+            if (startupException is not null)
+                mainWindow.Content = CreateStartupErrorPage(startupException);
+            desktop.MainWindow = mainWindow;
         }
         else if (ApplicationLifetime is IActivityApplicationLifetime singleViewFactoryApplicationLifetime)
         {
             singleViewFactoryApplicationLifetime.MainViewFactory = () => new PageNavigationHost()
             {
-                Page = new MainView { DataContext = new MainViewModel() }
+                Page = startupException is null
+                    ? new MainView { DataContext = new MainViewModel() }
+                    : CreateStartupErrorPage(startupException)
             };
         }
         else if (ApplicationLifetime is ISingleViewApplicationLifetime singleViewPlatform)
         {
             singleViewPlatform.MainView = new PageNavigationHost()
             {
-                Page = new MainView { DataContext = new MainViewModel() }
+                Page = startupException is null
+                    ? new MainView { DataContext = new MainViewModel() }
+                    : CreateStartupErrorPage(startupException)
             };
         }
 
         base.OnFrameworkInitializationCompleted();
+    }
+
+    private static ContentPage CreateStartupErrorPage(Exception exception)
+    {
+        string databasePath;
+        try
+        {
+            databasePath = CineBookContext.GetDatabasePath();
+        }
+        catch (Exception pathException)
+        {
+            databasePath = pathException.ToString();
+        }
+
+        var details = new TextBox
+        {
+            Text = $"Database path:\n{databasePath}\n\n{exception}",
+            IsReadOnly = true,
+            AcceptsReturn = true,
+            TextWrapping = TextWrapping.Wrap,
+            MinHeight = 280
+        };
+
+        return new ContentPage
+        {
+            Content = new ScrollViewer
+            {
+                Content = new StackPanel
+                {
+                    Spacing = 12,
+                    Margin = new Thickness(24),
+                    Children =
+                    {
+                        new TextBlock
+                        {
+                            Text = "Не удалось запустить CineBook",
+                            FontSize = 22,
+                            FontWeight = FontWeight.Bold
+                        },
+                        new TextBlock
+                        {
+                            Text = "Скопируйте текст ошибки и отправьте его для диагностики.",
+                            TextWrapping = TextWrapping.Wrap
+                        },
+                        details
+                    }
+                }
+            }
+        };
     }
 
     protected override void OnPropertyChanged(AvaloniaPropertyChangedEventArgs change)
