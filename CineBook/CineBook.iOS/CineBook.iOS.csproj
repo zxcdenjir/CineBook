@@ -2,8 +2,8 @@
   <PropertyGroup>
     <RootNamespace>CineBook</RootNamespace>
     <OutputType>Exe</OutputType>
-    <TargetFramework>net10.0-ios26.5</TargetFramework>
-    <SupportedOSPlatformVersion>13.0</SupportedOSPlatformVersion>
+    <TargetFramework>net10.0-ios</TargetFramework>
+    <SupportedOSPlatformVersion>15.0</SupportedOSPlatformVersion>
     <ApplicationTitle>CineBook</ApplicationTitle>
     <ApplicationId>com.cinebook.app</ApplicationId>
     <ApplicationVersion>1</ApplicationVersion>

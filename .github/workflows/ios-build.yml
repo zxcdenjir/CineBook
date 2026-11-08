@@ -1,0 +1,60 @@
+name: Build iOS (Unsigned for Sideloadly)
+
+on:
+  push:
+    branches: [ main, master ]
+  workflow_dispatch:
+
+env:
+  IOS_PROJECT: CineBook/CineBook.iOS/CineBook.iOS.csproj
+  SUPPORTED_IOS_VERSION: '15.0'
+
+jobs:
+  build-ios:
+    runs-on: xcode-27
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup .NET 10
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '10.0.x'
+
+      - name: Select Xcode 27.1
+        uses: maxim-lobanov/setup-xcode@v1
+        with:
+          xcode-version: '27.1'
+
+      - name: Install iOS workload
+        run: dotnet workload install ios
+
+      - name: Verify iOS project path
+        run: |
+          if [ ! -f "$IOS_PROJECT" ]; then
+            echo "Не найден проект: $IOS_PROJECT"
+            find . -name "*.iOS.csproj" -not -path "*/obj/*" -not -path "*/bin/*"
+            exit 1
+          fi
+
+      - name: Restore iOS project
+        run: dotnet restore "$IOS_PROJECT"
+
+      - name: Publish iOS (unsigned)
+        run: |
+          dotnet publish "$IOS_PROJECT" \
+            -f net10.0-ios \
+            -c Release \
+            -p:RuntimeIdentifier=ios-arm64 \
+            -p:SupportedOSPlatformVersion=${{ env.SUPPORTED_IOS_VERSION }} \
+            -p:EnableCodeSigning=false \
+            -o ./publish
+
+      - name: Upload unsigned IPA
+        uses: actions/upload-artifact@v7
+        with:
+          name: ios-unsigned-ipa
+          path: ./publish/*.ipa
+          archive: false
+          if-no-files-found: error
