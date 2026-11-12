@@ -12,6 +12,12 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <PropertyGroup Condition="'$(Configuration)' == 'Release'">
+    <PublishTrimmed>false</PublishTrimmed>
+    <MtouchLink>SdkOnly</MtouchLink>
+    <UseInterpreter>true</UseInterpreter>
+  </PropertyGroup>
+  
   <ItemGroup>
     <PackageReference Include="Avalonia.iOS" Version="12.1.5" />
   </ItemGroup>

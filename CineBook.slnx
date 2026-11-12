@@ -4,7 +4,7 @@
   </Project>
   <Project Path="CineBook/CineBook.Desktop/CineBook.Desktop.csproj" />
   <Project Path="CineBook/CineBook.iOS/CineBook.iOS.csproj">
-    <Deploy Solution="Release|*" />
+    <Deploy />
   </Project>
   <Project Path="CineBook/CineBook/CineBook.csproj" />
 </Solution>
