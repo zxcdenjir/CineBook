@@ -13,8 +13,13 @@
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)' == 'Release'">
-    <PublishTrimmed>false</PublishTrimmed>
-    <MtouchLink>SdkOnly</MtouchLink>
+    <!-- Обязательно должно быть true для iOS -->
+    <PublishTrimmed>true</PublishTrimmed>
+
+    <!-- Это отключает линкер (вырезание кода) для всех сборок -->
+    <MtouchLink>None</MtouchLink>
+
+    <!-- Включает интерпретатор, чтобы EF Core работал через рефлексию -->
     <UseInterpreter>true</UseInterpreter>
   </PropertyGroup>
   

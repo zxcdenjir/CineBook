@@ -50,7 +50,7 @@ jobs:
             -p:SupportedOSPlatformVersion=${{ env.SUPPORTED_IOS_VERSION }} \
             -p:EnableCodeSigning=false \
             -p:CopyDSYMToPublishDirectory=true \
-            -p:PublishTrimmed=false \
+            -p:MtouchLink=None \
             -p:UseInterpreter=true \
             -o ./publish
 
