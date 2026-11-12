@@ -8,6 +8,10 @@ on:
 env:
   IOS_PROJECT: CineBook/CineBook.iOS/CineBook.iOS.csproj
   SUPPORTED_IOS_VERSION: '15.0'
+  # Must match the Xcode version required by the installed .NET iOS workload.
+  # The unpinned `dotnet workload install ios` pulls Microsoft.iOS.Sdk.net10.0_27.2 (27.2.10000),
+  # which hard-requires Xcode 27.2 (https://aka.ms/xcode-requirement).
+  XCODE_VERSION: '27.2'
 
 jobs:
   build-ios:
@@ -22,13 +26,26 @@ jobs:
         with:
           dotnet-version: '10.0.x'
 
-      - name: Select Xcode 27.1
+      - name: Select Xcode
         uses: maxim-lobanov/setup-xcode@v1
         with:
-          xcode-version: '27.1'
+          xcode-version: ${{ env.XCODE_VERSION }}
 
       - name: Install iOS workload
-        run: dotnet workload install ios
+        run: |
+          dotnet workload install ios
+          dotnet workload list
+
+      - name: Verify Xcode version matches the iOS SDK requirement
+        run: |
+          set -euo pipefail
+          xcodebuild -version
+          # Fail fast with a clear message instead of a deep MSBuild error later.
+          XCODE_MAJOR_MINOR="$(xcodebuild -version | awk '/^Xcode/ { print $2 }')"
+          if [ "$XCODE_MAJOR_MINOR" != "$XCODE_VERSION" ]; then
+            echo "Selected Xcode ($XCODE_MAJOR_MINOR) differs from XCODE_VERSION ($XCODE_VERSION)"
+            exit 1
+          fi
 
       - name: Verify iOS project path
         run: |
